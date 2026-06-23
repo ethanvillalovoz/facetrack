@@ -1,190 +1,173 @@
-# FaceTrack: Smart Face Recognition Attendance System
+# FaceTrack
 
-![Build](https://img.shields.io/badge/build-passing-brightgreen)
-![License](https://img.shields.io/badge/license-MIT-blue)
-![Python](https://img.shields.io/badge/python-3.8%2B-blue)
-![React](https://img.shields.io/badge/frontend-React-blue)
-![FastAPI](https://img.shields.io/badge/backend-FastAPI-green)
+[![CI](https://github.com/ethanvillalovoz/facetrack/actions/workflows/ci.yml/badge.svg)](https://github.com/ethanvillalovoz/facetrack/actions/workflows/ci.yml)
+[![License](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
+[![Python](https://img.shields.io/badge/python-3.10%2B-blue.svg)](https://www.python.org/)
+[![React](https://img.shields.io/badge/react-19-blue.svg)](https://react.dev/)
+[![FastAPI](https://img.shields.io/badge/FastAPI-API-009688.svg)](https://fastapi.tiangolo.com/)
 
-![CI/CD](https://img.shields.io/github/actions/workflow/status/ethanvillalovoz/FaceTrack-Face-Attendance-System/ci.yml?branch=main&label=CI%2FCD)
+FaceTrack is a full-stack face-recognition attendance system. It combines a React dashboard, a FastAPI backend, SQLite persistence, and OpenCV/`face_recognition` batch processing so users can register known faces, upload attendance-session images, process matches, and view attendance records.
 
+![FaceTrack dashboard](docs/screenshots/home_page.png)
 
-## 🚀 Introduction
+## Features
 
-**FaceTrack** is a modern, full-stack face recognition attendance system. It enables organizations to automate attendance logging using face recognition, providing a seamless and contactless experience.
+- Register known faces through image uploads
+- Upload batch attendance-session images
+- Run face-recognition processing against known faces
+- Store attendance records in SQLite
+- View attendance records from the React dashboard
+- Run standalone Python demos for webcam and batch workflows
 
----
+## Tech Stack
 
-## 🔄 CI/CD Integration
+- Frontend: React, Vite, CSS
+- Backend: FastAPI, Uvicorn, SQLite
+- Computer vision: OpenCV, `face_recognition`, NumPy
+- Tooling: GitHub Actions, pytest, React Testing Library
 
-FaceTrack now features automated CI/CD using GitHub Actions:
+## Screenshots
 
-- **Continuous Integration (CI):** Automatically installs dependencies and runs tests for both backend and frontend on every push or pull request to `main`.
-- **Continuous Deployment (CD):** Ready for deployment automation. Customize the workflow for your preferred platform.
+![FaceTrack example workflow](docs/screenshots/example.png)
 
-See `.github/workflows/ci.yml` and `.github/workflows/cd.yml` for details.
+## Prerequisites
 
----
+- Python 3.10+
+- Node.js 20+
+- macOS or Linux recommended for `face_recognition`/`dlib` installation
+- A webcam only if running the standalone webcam demo
 
-## 📖 Description
+The `face_recognition` package depends on `dlib`, which may require native build tools. On macOS, installing CMake and Xcode command-line tools first is often necessary.
 
-FaceTrack allows users to:
-- Upload known face images (for registration)
-- Upload batch images (for attendance sessions)
-- Process batches to recognize faces and mark attendance
-- View and download attendance records
+## Quick Start
 
-The system uses a React frontend, FastAPI backend, and a SQLite database for robust, real-time attendance management.
-
----
-
-## 🖼️ Visuals
-
-![FaceTrack UI Screenshot](docs/screenshots/home_page.png)
-*Main dashboard: Upload, process, and view attendance records.*
-
----
-
-## 🛠️ Prerequisites / Requirements
-
-- **Python 3.8+** (for backend)
-- **Node.js 16+ & npm** (for frontend)
-- **conda** (optional, for environment management)
-- **OpenCV, face_recognition, FastAPI, Uvicorn** (see requirements.txt)
-- **LFW dataset** (optional, for demo/testing)
-
----
-
-## ⚙️ Technologies Used
-
-- **Frontend:** React, CSS
-- **Backend:** FastAPI, Uvicorn
-- **Face Recognition:** face_recognition, OpenCV
-- **Database:** SQLite
-- **Other:** Python standard libraries
-
----
-
-## ⚡ QuickStart Guide
-
-### 1. Clone the repository
+Clone the repository:
 
 ```bash
-git clone https://github.com/ethanvillalovoz/FaceTrack-Face-Attendance-System.git
-cd FaceTrack-Face-Attendance-System
+git clone https://github.com/ethanvillalovoz/facetrack.git
+cd facetrack
 ```
 
-### 2. Set up the backend
+Set up the backend:
 
 ```bash
-conda create -n FaceTrack python=3.13
-conda activate FaceTrack
+conda create -n facetrack python=3.11
+conda activate facetrack
 pip install -r requirements.txt
 uvicorn backend.fastapi_app:app --reload
 ```
 
-### 3. Set up the frontend
+Set up the frontend in a second terminal:
 
 ```bash
 cd frontend
 npm install
+cp .env.example .env
 npm start
 ```
 
-### 4. Access the application
+The frontend runs at `http://localhost:3000` and the backend runs at `http://localhost:8000`.
 
-- Frontend: `http://localhost:3000`
-- Backend: `http://localhost:8000`
+## Configuration
 
----
+Backend configuration is read from environment variables:
 
-## 📂 Folder Structure & Purpose
-
-```
-face-attendance-system/
-│
-├── backend/               # Backend application (FastAPI)
-│   ├── database/          # Database logic and SQLite integration
-│   └── fastapi_app.py     # FastAPI entry point and API endpoints
-│
-├── frontend/              # Frontend application (React)
-│   ├── public/            # Static assets for React
-│   ├── src/               # React source code (components, styles)
-│   └── package.json       # npm configuration and dependencies
-│
-├── src/                   # Core Python scripts for face recognition
-│   ├── AttendanceProject.py   # Webcam-based attendance logic
-│   ├── batch_attendance.py   # Batch image attendance processing
-│   ├── basics.py             # Basic face recognition demo
-│   └── sample_lfw_images.py  # Utility for sampling LFW images
-│
-├── data/                  # Data storage for images and attendance
-│   ├── known_faces/           # Uploaded known face images
-│   ├── batch_images/          # Uploaded batch images for attendance
-│   ├── Attendance.csv         # (Legacy) CSV attendance log
-│   ├── image_attendance_data/ # Images for webcam attendance demo
-│   ├── image_basics_data/     # Images for basics.py demo
-│   └── lfw/                   # LFW dataset for testing/demo
-│
-├── docs/                  # Documentation and screenshots
-│   ├── screenshots/           # UI screenshots for README/docs
-│   └── ...                    # Other documentation files
-│
-├── .gitignore             # Git ignore file
-├── README.md              # This file
-└── requirements.txt       # Python dependencies
+```bash
+FACETRACK_ALLOWED_ORIGINS=http://localhost:3000,http://127.0.0.1:3000
+FACETRACK_KNOWN_DIR=data/known_faces
+FACETRACK_BATCH_DIR=data/batch_images
+FACETRACK_DB_PATH=backend/attendance.db
 ```
 
-### **Folder Purpose Summary**
+Frontend configuration lives in `frontend/.env`:
 
-- **backend/**: All backend logic, API, and database code.
-- **frontend/**: All frontend React code and static assets.
-- **src/**: Python scripts for face recognition, attendance, and utilities.
-- **data/**: Stores all images, attendance logs, and datasets used by the system.
-- **docs/**: Documentation and visuals for the project.
-- **.gitignore, README.md, requirements.txt**: Standard project files for setup and documentation.
+```bash
+VITE_API_BASE_URL=http://127.0.0.1:8000
+```
 
----
+## API Overview
 
-## 🔌 API Endpoints Overview
+| Endpoint | Method | Purpose |
+| --- | --- | --- |
+| `/` | GET | Basic API health check |
+| `/health` | GET | Structured health check for CI and monitoring |
+| `/upload/known/` | POST | Upload a known face image |
+| `/upload/batch/` | POST | Upload a batch image for processing |
+| `/process/` | POST | Run batch face recognition and mark attendance |
+| `/attendance/` | GET | Retrieve attendance records |
 
-| Endpoint                | Method | Purpose                                              |
-|-------------------------|--------|------------------------------------------------------|
-| `/upload/known/`        | POST   | Upload a known face image for registration           |
-| `/upload/batch/`        | POST   | Upload a batch image for attendance processing       |
-| `/process/`             | POST   | Trigger batch face recognition and mark attendance   |
-| `/attendance/`          | GET    | Retrieve all attendance records                      |
-| `/`                     | GET    | Health check for backend                             |
+FastAPI's interactive docs are available at `http://localhost:8000/docs` when the backend is running.
 
-All endpoints are available at `http://localhost:8000` by default.
+## Development
 
----
+Run frontend checks:
 
-## ❓ Troubleshooting / FAQ
+```bash
+cd frontend
+npm test
+npm run build
+```
 
-**Q: The frontend can't connect to the backend.**  
-A: Ensure the backend is running (`uvicorn backend.fastapi_app:app --reload`) and CORS is enabled. The default CORS settings allow all origins.
+Run backend smoke tests:
 
-**Q: No faces are recognized in uploaded images.**  
-A: Make sure you have uploaded clear, front-facing images for both known and batch sets. Check that the image files are not corrupted.
+```bash
+pip install -r requirements-ci.txt
+PYTHONPATH=. pytest backend/tests
+```
 
-**Q: I get a "ModuleNotFoundError" or missing dependency error.**  
-A: Double-check that you've installed all Python and Node.js dependencies using `pip install -r requirements.txt` and `npm install`.
+`requirements-ci.txt` intentionally avoids native computer-vision dependencies so CI can verify API wiring without compiling `dlib`. Use `requirements.txt` for the full local recognition pipeline.
 
-**Q: How do I get the LFW dataset for testing?**  
-A: Download the LFW dataset from [https://www.kaggle.com/datasets/jessicali9530/lfw-dataset](https://www.kaggle.com/datasets/jessicali9530/lfw-dataset?resource=download) and extract it to `data/lfw/`.
+## Project Structure
 
-**Q: CORS or network errors in the browser console.**  
-A: Make sure both frontend (`npm start`) and backend (`uvicorn ...`) are running, and that you are accessing the correct ports.
+```text
+facetrack/
+├── backend/
+│   ├── database/
+│   │   └── attendance_db.py
+│   └── fastapi_app.py
+├── data/
+│   ├── batch_images/
+│   ├── image_attendance_data/
+│   ├── image_basics_data/
+│   └── known_faces/
+├── docs/
+│   ├── architecture.md
+│   ├── faq.md
+│   ├── usage-guide.md
+│   └── screenshots/
+├── frontend/
+│   ├── public/
+│   └── src/
+├── src/
+│   ├── AttendanceProject.py
+│   ├── basics.py
+│   ├── batch_attendance.py
+│   └── sample_lfw_images.py
+├── requirements.txt
+└── requirements-ci.txt
+```
 
----
+## Privacy And Data
 
-## 📫 Contact / Support
+Face recognition systems handle biometric data. Use FaceTrack only with images you have permission to process, and do not commit real attendance databases, generated CSV logs, or private face images. Runtime databases and local attendance output are ignored by git.
 
-- For issues, feature requests, or questions, please [open an issue](https://github.com/ethanvillalovoz/Face-Attendance-System/tree/main/.github/ISSUE_TEMPLATE) on GitHub.
+## Documentation
 
----
+- [Architecture](docs/architecture.md)
+- [Usage guide](docs/usage-guide.md)
+- [FAQ](docs/faq.md)
 
-## 📝 License
+## Roadmap
 
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+- [x] React dashboard for uploads and attendance viewing
+- [x] FastAPI upload and attendance endpoints
+- [x] Batch image processing pipeline
+- [x] SQLite-backed attendance records
+- [ ] Authentication and role-based access
+- [ ] Admin roster management
+- [ ] Docker Compose development environment
+- [ ] Production deployment guide
+
+## License
+
+This project is released under the [MIT License](LICENSE).

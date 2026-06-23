@@ -1,5 +1,7 @@
 import React, { useState } from "react";
 
+import { apiUrl } from "../api";
+
 /**
  * ProcessBatch
  * Triggers batch face recognition and marks attendance via the backend.
@@ -12,16 +14,18 @@ function ProcessBatch() {
   const handleProcess = async () => {
     setLoading(true);
     setMessage("");
+
     try {
-      const res = await fetch("http://127.0.0.1:8000/process/", {
+      const res = await fetch(apiUrl("/process/"), {
         method: "POST",
       });
       const data = await res.json();
       setMessage(data.info || data.error);
-    } catch (err) {
+    } catch {
       setMessage("Batch processing failed. Please try again.");
+    } finally {
+      setLoading(false);
     }
-    setLoading(false);
   };
 
   return (

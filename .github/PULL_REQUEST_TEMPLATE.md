@@ -1,28 +1,29 @@
 # Pull Request
 
-Thank you for your contribution! Please fill out the following checklist and provide details about your changes.
+## Summary
 
-## Description
+Describe what changed and why.
 
-<!-- Please include a summary of the change and which issue is fixed. Also include relevant motivation and context. -->
+## Scope
 
-Fixes #(issue)
+- [ ] Frontend
+- [ ] Backend/API
+- [ ] Recognition pipeline
+- [ ] Database/storage
+- [ ] Documentation
+- [ ] CI/tooling
 
-## Type of change
-- [ ] Bug fix
-- [ ] New feature
-- [ ] Documentation update
-- [ ] Other (please describe):
+## Validation
 
-## Checklist
-- [ ] My code follows the project style guidelines
-- [ ] I have performed a self-review of my code
-- [ ] I have commented my code, particularly in hard-to-understand areas
-- [ ] I have made corresponding changes to the documentation (if relevant)
-- [ ] My changes generate no new warnings
-- [ ] I have added tests that prove my fix is effective or that my feature works (if applicable)
-- [ ] New and existing tests pass locally with my changes
+- [ ] `PYTHONPATH=. pytest backend/tests`
+- [ ] `cd frontend && npm test`
+- [ ] `cd frontend && npm run build`
+- [ ] Manual upload/process flow checked, if behavior changed
 
-## Additional context
+## Data And Privacy
 
-<!-- Add any other context about the PR here. -->
+- [ ] No private face images, attendance databases, generated CSV files, or secrets are included.
+
+## Notes
+
+Add screenshots, logs, or implementation details that reviewers should know.

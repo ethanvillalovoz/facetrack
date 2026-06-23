@@ -1,6 +1,14 @@
 # Local folders and files that should not be tracked by git in local repo.
 data/lfw/archive/
 data/lfw/*.zip
+backend/*.db
+backend/*.db-journal
+data/Attendance.csv
+data/known_faces/*
+data/batch_images/*
+!data/known_faces/.gitkeep
+!data/batch_images/.gitkeep
+frontend/.env
 
 # Byte-compiled / optimized / DLL files
 __pycache__/

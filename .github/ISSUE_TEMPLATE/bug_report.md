@@ -1,29 +1,41 @@
 ---
-name: "🐛 Bug Report"
-about: Report a bug to help us improve
+name: Bug report
+about: Report a reproducible FaceTrack problem
 labels: bug
 ---
 
-**Describe the bug**
-A clear and concise description of what the bug is.
+## Summary
 
-**To Reproduce**
-Steps to reproduce the behavior:
-1. Go to '...'
-2. Click on '...'
-3. Scroll down to '...'
-4. See error
+Describe the bug clearly.
 
-**Expected behavior**
-A clear and concise description of what you expected to happen.
+## Steps To Reproduce
 
-**Screenshots**
-If applicable, add screenshots to help explain your problem.
+1. Start the backend with:
+2. Start the frontend with:
+3. Upload/process:
+4. Observe:
 
-**Environment (please complete the following information):**
-- OS: [e.g. macOS, Windows, Linux]
-- Browser [e.g. Chrome, Safari]
-- Python version [e.g. 3.10]
+## Expected Behavior
 
-**Additional context**
-Add any other context about the problem here.
+What should have happened?
+
+## Actual Behavior
+
+What happened instead?
+
+## Environment
+
+- OS:
+- Python version:
+- Node.js version:
+- Browser:
+- Backend command:
+- Frontend command:
+
+## Logs Or Screenshots
+
+Include relevant terminal output, browser console errors, API responses, or screenshots.
+
+## Data Context
+
+Do not upload private face images. Describe the image type, resolution, and number of faces instead.

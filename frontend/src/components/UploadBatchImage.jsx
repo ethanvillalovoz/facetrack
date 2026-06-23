@@ -1,11 +1,13 @@
 import React, { useState } from "react";
 
+import { apiUrl } from "../api";
+
 /**
- * UploadKnownFace
- * Allows the user to upload a known face image for recognition.
+ * UploadBatchImage
+ * Allows the user to upload a batch image for attendance processing.
  * Shows a preview, handles loading state, and displays feedback.
  */
-function UploadKnownFace() {
+function UploadBatchImage() {
   const [file, setFile] = useState(null);
   const [preview, setPreview] = useState(null);
   const [message, setMessage] = useState("");
@@ -25,26 +27,29 @@ function UploadKnownFace() {
       setMessage("Please select a file.");
       return;
     }
+
     setLoading(true);
     setMessage("");
+
     try {
       const formData = new FormData();
       formData.append("file", file);
-      const res = await fetch("http://127.0.0.1:8000/upload/known/", {
+      const res = await fetch(apiUrl("/upload/batch/"), {
         method: "POST",
         body: formData,
       });
       const data = await res.json();
       setMessage(data.info || data.error);
-    } catch (err) {
+    } catch {
       setMessage("Upload failed. Please try again.");
+    } finally {
+      setLoading(false);
     }
-    setLoading(false);
   };
 
   return (
     <div style={{ marginBottom: 0 }}>
-      <h3>Upload Known Face</h3>
+      <h3>Upload Batch Image</h3>
       <input type="file" onChange={handleFileChange} />
       {preview && (
         <div>
@@ -65,4 +70,4 @@ function UploadKnownFace() {
   );
 }
 
-export default UploadKnownFace;
+export default UploadBatchImage;

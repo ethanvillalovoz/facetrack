@@ -1,35 +1,51 @@
-# Contributing to FaceTrack
+# Contributing To FaceTrack
 
-Thank you for your interest in contributing to FaceTrack! Your help is greatly appreciated. Please follow these guidelines to make the process smooth for everyone.
+Thanks for your interest in improving FaceTrack.
 
-## How to Contribute
+## Development Setup
 
-- **Fork the repository** and create your branch (`git checkout -b feature/your-feature`)
-- **Commit your changes** with clear messages (`git commit -am 'Add new feature'`)
-- **Push to your branch** (`git push origin feature/your-feature`)
-- **Open a Pull Request** and describe your changes
+Backend:
 
-## Creating Good Issues or Pull Requests
+```bash
+conda create -n facetrack python=3.11
+conda activate facetrack
+pip install -r requirements.txt
+uvicorn backend.fastapi_app:app --reload
+```
 
-- Clearly describe the problem or feature
-- Include steps to reproduce bugs
-- Add screenshots or logs if helpful
-- Reference related issues or pull requests
+Frontend:
 
-## Code of Conduct
+```bash
+cd frontend
+npm install
+cp .env.example .env
+npm start
+```
 
-- Be respectful and inclusive
-- Provide constructive feedback
-- Follow the [GitHub Community Guidelines](https://docs.github.com/en/site-policy/github-terms/github-community-guidelines)
+## Checks
 
-## Community & Support
+Run backend smoke tests:
 
-- For questions, open an issue or start a discussion
-- For major changes, please open an issue first to discuss what you would like to change
+```bash
+pip install -r requirements-ci.txt
+PYTHONPATH=. pytest backend/tests
+```
 
-## Useful Links
+Run frontend tests and build:
 
-- [README.md](README.md) — Project overview and setup
-- [docs/](docs/) — Additional documentation
+```bash
+cd frontend
+npm test
+npm run build
+```
 
-Thank you for helping make FaceTrack better!
+## Pull Requests
+
+- Keep changes focused and explain the user-facing impact.
+- Update docs when setup, configuration, endpoints, or workflows change.
+- Add or update tests for behavior changes when practical.
+- Do not commit generated databases, attendance CSVs, private face images, API keys, or `.env` files.
+
+## Privacy
+
+FaceTrack can process biometric data. Only use images you have permission to process and avoid sharing private datasets in issues or pull requests.

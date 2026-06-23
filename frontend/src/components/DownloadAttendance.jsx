@@ -1,5 +1,7 @@
 import React, { useState } from "react";
 
+import { apiUrl } from "../api";
+
 /**
  * DownloadAttendance
  * Fetches and displays attendance records from the backend.
@@ -13,16 +15,18 @@ function DownloadAttendance() {
   const fetchAttendance = async () => {
     setLoading(true);
     setError("");
+
     try {
-      const res = await fetch("http://127.0.0.1:8000/attendance/");
+      const res = await fetch(apiUrl("/attendance/"));
       if (!res.ok) throw new Error("Failed to fetch attendance.");
       const data = await res.json();
       setAttendance(data.attendance || []);
-    } catch (err) {
+    } catch {
       setError("Could not load attendance records.");
       setAttendance([]);
+    } finally {
+      setLoading(false);
     }
-    setLoading(false);
   };
 
   return (

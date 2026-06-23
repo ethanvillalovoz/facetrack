@@ -12,18 +12,12 @@ body {
   display: flex;
   flex-direction: column;
   align-items: center;
-}
-
-.App {
   max-width: 500px;
   margin: 2rem auto;
   background: #fff;
   border-radius: 12px;
   box-shadow: 0 4px 24px rgba(0,0,0,0.08);
   padding: 2rem 2.5rem;
-}
-
-.App {
   text-align: center;
 }
 
@@ -107,26 +101,4 @@ img {
   max-width: 100px;
   max-height: 100px;
   display: block;
-}
-
-/* === Utilities === */
-
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
-}
-
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
-}
-
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
 }
