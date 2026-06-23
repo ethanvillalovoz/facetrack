@@ -1,6 +1,6 @@
 # Changelog
 
-## Unreleased
+## [1.0.0] - 2026-06-23
 
 - Polished public documentation, screenshots references, setup instructions, and project metadata.
 - Replaced placeholder deployment automation with CI for backend smoke tests and frontend test/build checks.
