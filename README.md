@@ -30,6 +30,12 @@ FaceTrack is a full-stack face-recognition attendance system. It combines a Reac
 
 ![FaceTrack example workflow](docs/screenshots/example.png)
 
+## Demo Availability
+
+FaceTrack is not currently published as a public live app because it depends on a running FastAPI backend, local image uploads, SQLite persistence, and responsible handling of biometric data. The README screenshots are the public demo surface for now.
+
+See [Demo strategy](docs/demo-strategy.md) for the recommended walkthrough format and the requirements for adding a maintained hosted demo later.
+
 ## Prerequisites
 
 - Python 3.10+
@@ -155,6 +161,7 @@ Face recognition systems handle biometric data. Use FaceTrack only with images y
 
 - [Architecture](docs/architecture.md)
 - [Usage guide](docs/usage-guide.md)
+- [Demo strategy](docs/demo-strategy.md)
 - [FAQ](docs/faq.md)
 
 ## Roadmap
