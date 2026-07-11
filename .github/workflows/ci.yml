@@ -25,7 +25,7 @@ jobs:
           pip install -r requirements-ci.txt
 
       - name: Run backend tests
-        run: PYTHONPATH=. pytest backend/tests
+        run: ruff check backend src && pytest -q
 
   frontend:
     runs-on: ubuntu-latest
@@ -46,8 +46,5 @@ jobs:
       - name: Install frontend dependencies
         run: npm ci
 
-      - name: Run frontend tests
-        run: npm test
-
-      - name: Build frontend
-        run: npm run build
+      - name: Check frontend
+        run: npm run check

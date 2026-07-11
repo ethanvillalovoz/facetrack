@@ -1,57 +1,21 @@
-# FaceTrack Demo Strategy
+# Demo Strategy
 
-FaceTrack is best presented as a reproducible local demo plus screenshots or a short walkthrough video. It should not advertise a public live demo unless the backend, frontend, storage policy, and biometric-data handling expectations are intentionally designed for public use.
+FaceTrack's public demonstration is synthetic by design.
 
-## Current Public Demo
+## Review Path
 
-- README screenshot gallery:
-  - `docs/screenshots/home_page.png`
-  - `docs/screenshots/example.png`
-- Local reproduction through the README quick start and usage guide.
+1. Start only the frontend with `npm run dev`.
+2. Inspect the abstract four-person session frame.
+3. Run recognition and watch the processing trace.
+4. Compare three matches against one unknown detection.
+5. Open Roster and Attendance to inspect the surrounding workflow.
 
-## Why Not GitHub Pages
+This path communicates the product and systems behavior without publishing biometric data or pretending that fixtures came from live inference.
 
-GitHub Pages only hosts static files. It cannot run:
+## README Media
 
-- The FastAPI backend.
-- OpenCV and `face_recognition` processing.
-- Local image upload handling.
-- SQLite attendance persistence.
-- Privacy controls for biometric data.
+`docs/media/facetrack-console.gif` cycles through browser-verified ready, scanning, completed, roster, and attendance states. Desktop and mobile captures are stored alongside it.
 
-For that reason, a GitHub Pages link would only show static frontend assets unless the backend and data-handling workflow were hosted elsewhere.
+## Native Demo
 
-## Recommended Public Demo Format
-
-The strongest next demo artifact would be a short GIF or video that uses consent-safe sample images and shows:
-
-1. Opening the dashboard.
-2. Uploading a known face image.
-3. Uploading a batch attendance image.
-4. Running the recognition process.
-5. Viewing the resulting attendance table.
-
-Keep the walkthrough around 30 to 60 seconds and avoid showing private or real attendance data.
-
-## Local Reproduction Checklist
-
-Before recording a walkthrough:
-
-- Create and activate the backend Python environment.
-- Install full local dependencies from `requirements.txt`.
-- Start the backend with `uvicorn backend.fastapi_app:app --reload`.
-- Install frontend dependencies.
-- Configure `frontend/.env` with the local API URL.
-- Start the frontend with `npm start`.
-- Use only consent-safe sample images.
-- Remove generated databases, CSV logs, and uploaded private images before committing.
-
-## If A Hosted Demo Is Added Later
-
-A real public live demo should only be linked after:
-
-- The backend is deployed and health-checked.
-- Upload handling and storage retention are documented.
-- Authentication or access control is added if the app accepts user images.
-- Demo data is synthetic or consent-safe.
-- The README clearly labels the hosted demo as maintained.
+For local inference, use images you have explicit permission to process. Do not screen-record private names or faces for public documentation. Remove the local database and runtime data after the walkthrough.

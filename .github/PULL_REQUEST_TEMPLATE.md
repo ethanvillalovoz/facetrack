@@ -15,9 +15,9 @@ Describe what changed and why.
 
 ## Validation
 
-- [ ] `PYTHONPATH=. pytest backend/tests`
-- [ ] `cd frontend && npm test`
-- [ ] `cd frontend && npm run build`
+- [ ] `ruff check backend src`
+- [ ] `pytest -q`
+- [ ] `cd frontend && npm run check`
 - [ ] Manual upload/process flow checked, if behavior changed
 
 ## Data And Privacy

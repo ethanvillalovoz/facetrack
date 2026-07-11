@@ -1,49 +1,45 @@
 # Architecture
 
-FaceTrack is organized as a small full-stack application with a separate computer-vision processing layer.
+FaceTrack is a local reference implementation with a deterministic review mode and an optional native recognition runtime.
 
-## Components
+## Runtime Modes
 
-### React Frontend
+The default frontend uses `DemoApiProvider`. It presents synthetic identities and deterministic comparison results through the same methods as the live provider. `VITE_FACETRACK_MODE=live` switches the interface to FastAPI.
 
-The frontend lives in `frontend/` and provides the user-facing workflow:
+```mermaid
+flowchart TD
+    UI[React console] --> MODE{Runtime mode}
+    MODE -->|demo| FIX[Abstract identities + fixtures]
+    MODE -->|live| API[FastAPI]
+    API --> IMG[Image validation + EXIF stripping]
+    IMG --> STORE[UUID local storage]
+    STORE --> CV[face_recognition pipeline]
+    CV --> DB[(SQLite roster + attendance)]
+    CV --> CLEAN[Session frame cleanup]
+```
 
-- Upload a known face image
-- Upload a batch image
-- Trigger batch processing
-- Fetch and display attendance records
+## Image Boundary
 
-The frontend reads `VITE_API_BASE_URL` and defaults to `http://127.0.0.1:8000`.
+The API accepts JPEG, PNG, and WebP up to the configured byte limit. Pillow verifies the payload, applies EXIF orientation, converts it to RGB, constrains dimensions, and writes a normalized JPEG. This removes original metadata and avoids trusting the client filename.
 
-### FastAPI Backend
+## Recognition Boundary
 
-The backend lives in `backend/` and exposes upload, processing, health, and attendance endpoints. Uploaded files are written to configured local directories:
+Native dependencies are loaded only when a recognition session runs. Reference files without a detectable face are skipped. A session fails clearly when there are no valid references or no staged frames.
 
-- `FACETRACK_KNOWN_DIR`
-- `FACETRACK_BATCH_DIR`
+For each detected descriptor:
 
-Attendance records are stored in SQLite through `backend/database/attendance_db.py`.
+1. Compute distance to every valid reference descriptor.
+2. Select the minimum distance.
+3. Match only when the distance is at or below `0.48` by default.
+4. Record the identity once per UTC day.
+5. Keep above-threshold detections unknown.
 
-### Recognition Pipeline
+The process returns frame count, detected face count, matches, unknown count, newly inserted attendance count, and the threshold used.
 
-The recognition pipeline lives in `src/`:
+## Concurrency And Retention
 
-- `AttendanceProject.py` contains shared image-loading, encoding, and webcam attendance logic.
-- `batch_attendance.py` loads known faces, scans batch images, compares encodings, and marks recognized people.
-- `basics.py` and `sample_lfw_images.py` are standalone demos/utilities.
+An in-process lock permits one recognition session at a time. Session frames are deleted in a `finally` block, including failed sessions, unless `FACETRACK_DELETE_BATCH_AFTER_PROCESS=false` is set. Reference images persist until replaced or manually removed.
 
-The heavy computer-vision dependencies are imported only when the recognition path is executed, which keeps health checks and API smoke tests fast.
+## Deployment Limits
 
-## Data Flow
-
-1. A user uploads known faces through the frontend.
-2. The backend stores those files in `data/known_faces/` by default.
-3. A user uploads attendance-session images.
-4. The backend stores those files in `data/batch_images/` by default.
-5. The user triggers `/process/`.
-6. The recognition pipeline computes face encodings, compares them against known faces, and writes matches to SQLite.
-7. The frontend fetches `/attendance/` and displays the stored records.
-
-## Runtime Data
-
-Runtime databases, generated CSV logs, and local uploads should not be committed. The repository includes sample/demo images, but real biometric data should stay local and should only be processed with consent.
+The API has no user authentication because it is intended for one trusted local operator. Production use requires a private storage and identity architecture rather than a client-side API key bolted onto this prototype.

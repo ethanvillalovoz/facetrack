@@ -1,59 +1,54 @@
 # Usage Guide
 
-## Start The App
-
-Start the backend:
-
-```bash
-conda create -n facetrack python=3.11
-conda activate facetrack
-pip install -r requirements.txt
-uvicorn backend.fastapi_app:app --reload
-```
-
-Start the frontend:
+## Synthetic UI Demo
 
 ```bash
 cd frontend
 npm install
+npm run dev
+```
+
+Open `http://localhost:5173`. The default mode requires no backend or images.
+
+## Native Local Runtime
+
+```bash
+python3 -m venv .venv
+source .venv/bin/activate
+pip install -r requirements.txt
+uvicorn backend.fastapi_app:app --reload
+```
+
+Then configure and start the frontend:
+
+```bash
+cd frontend
 cp .env.example .env
-npm start
+npm install
+npm run dev
 ```
 
-Open `http://localhost:3000`.
+## Enroll A Reference
 
-## Register Known Faces
+Open Roster, provide a display label, and choose one clear reference image. Uploading the same label again replaces the prior file. Images are validated, reoriented, stripped of metadata, and normalized to JPEG.
 
-Use "Upload Known Face" to add clear, front-facing reference images. The backend stores them in `data/known_faces/` by default. File names are used as person labels, so use descriptive names such as `Ada_Lovelace.jpg`.
+## Run A Session
 
-## Upload Batch Images
+1. Open Session and stage one or more consented frames.
+2. Run recognition.
+3. Review match and unknown counts.
+4. Open Attendance to inspect or export the daily ledger.
 
-Use "Upload Batch Image" to upload attendance-session images. The backend stores them in `data/batch_images/` by default.
+By default, every staged frame is deleted after the attempt, including failed processing.
 
-## Process Attendance
+## Command Line
 
-Click "Run Batch Processing" to compare batch images against the known-face set. Recognized names are stored in SQLite with timestamps.
-
-## View Records
-
-Click "View Attendance" to fetch records from `/attendance/`.
-
-## Run Standalone Scripts
-
-Batch processing:
+With references and session frames already staged:
 
 ```bash
-python src/batch_attendance.py
+python -m src.cli --known data/known_faces --batch data/batch_images --threshold 0.48
 ```
 
-Webcam demo:
+## Reset Local State
 
-```bash
-python src/AttendanceProject.py
-```
-
-Press `q` to exit the webcam window.
-
-## Data Handling
-
-Do not commit real face images, generated attendance CSVs, or SQLite databases. Keep production or real-world biometric data outside the repository and process only images you have permission to use.
+Stop the API, then remove `backend/attendance.db`, `data/known_faces/`, and `data/batch_images/`. These paths are ignored by git.
