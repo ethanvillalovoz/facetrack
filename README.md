@@ -1,180 +1,146 @@
 # FaceTrack
 
 [![CI](https://github.com/ethanvillalovoz/facetrack/actions/workflows/ci.yml/badge.svg)](https://github.com/ethanvillalovoz/facetrack/actions/workflows/ci.yml)
-[![License](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
-[![Python](https://img.shields.io/badge/python-3.10%2B-blue.svg)](https://www.python.org/)
-[![React](https://img.shields.io/badge/react-19-blue.svg)](https://react.dev/)
-[![FastAPI](https://img.shields.io/badge/FastAPI-API-009688.svg)](https://fastapi.tiangolo.com/)
+[![License](https://img.shields.io/badge/license-MIT-222222.svg)](LICENSE)
+[![React](https://img.shields.io/badge/React-19-222222.svg)](https://react.dev/)
+[![FastAPI](https://img.shields.io/badge/FastAPI-0.115%2B-222222.svg)](https://fastapi.tiangolo.com/)
 
-FaceTrack is a full-stack face-recognition attendance system. It combines a React dashboard, a FastAPI backend, SQLite persistence, and OpenCV/`face_recognition` batch processing so users can register known faces, upload attendance-session images, process matches, and view attendance records.
+A local-first face-matching reference system for staging consented session frames, inspecting every identity decision, and writing a deduplicated attendance ledger.
 
-![FaceTrack dashboard](docs/screenshots/home_page.png)
+![FaceTrack recognition console](docs/media/facetrack-console.gif)
 
-## Features
+## What It Demonstrates
 
-- Register known faces through image uploads
-- Upload batch attendance-session images
-- Run face-recognition processing against known faces
-- Store attendance records in SQLite
-- View attendance records from the React dashboard
-- Run standalone Python demos for webcam and batch workflows
+- A synthetic interactive demo with no accounts, backend, or real face images.
+- A real local path built on `face_recognition`, FastAPI, SQLite, and React.
+- JPEG/PNG/WebP validation, upload limits, EXIF removal, and image normalization.
+- UUID storage names that prevent traversal and accidental overwrite.
+- A non-blocking processing lock and structured match summary.
+- One attendance record per identity per UTC day, enforced by SQLite.
+- Automatic deletion of session frames after processing by default.
+- CSV export, roster replacement, responsive UI, tests, lint, and CI.
 
-## Tech Stack
+## Run The Synthetic Demo
 
-- Frontend: React, Vite, CSS
-- Backend: FastAPI, Uvicorn, SQLite
-- Computer vision: OpenCV, `face_recognition`, NumPy
-- Tooling: GitHub Actions, pytest, React Testing Library
-
-## Screenshots
-
-![FaceTrack example workflow](docs/screenshots/example.png)
-
-## Demo Availability
-
-FaceTrack is not currently published as a public live app because it depends on a running FastAPI backend, local image uploads, SQLite persistence, and responsible handling of biometric data. The README screenshots are the public demo surface for now.
-
-See [Demo strategy](docs/demo-strategy.md) for the recommended walkthrough format and the requirements for adding a maintained hosted demo later.
-
-## Prerequisites
-
-- Python 3.10+
-- Node.js 20+
-- macOS or Linux recommended for `face_recognition`/`dlib` installation
-- A webcam only if running the standalone webcam demo
-
-The `face_recognition` package depends on `dlib`, which may require native build tools. On macOS, installing CMake and Xcode command-line tools first is often necessary.
-
-## Quick Start
-
-Clone the repository:
+The frontend opens in demo mode by default. It uses abstract identities and deterministic decisions while preserving the live API contract.
 
 ```bash
 git clone https://github.com/ethanvillalovoz/facetrack.git
-cd facetrack
+cd facetrack/frontend
+npm install
+npm run dev
 ```
 
-Set up the backend:
+Open `http://localhost:5173`. No image files or credentials are required.
+
+## Run The Local Vision Stack
+
+The native `face_recognition` dependency includes dlib and may require CMake and platform build tools.
 
 ```bash
-conda create -n facetrack python=3.11
-conda activate facetrack
+python3 -m venv .venv
+source .venv/bin/activate
 pip install -r requirements.txt
 uvicorn backend.fastapi_app:app --reload
 ```
 
-Set up the frontend in a second terminal:
+In a second terminal:
 
 ```bash
 cd frontend
-npm install
 cp .env.example .env
-npm start
+npm install
+npm run dev
 ```
 
-The frontend runs at `http://localhost:3000` and the backend runs at `http://localhost:8000`.
+`frontend/.env` must include:
 
-## Configuration
-
-Backend configuration is read from environment variables:
-
-```bash
-FACETRACK_ALLOWED_ORIGINS=http://localhost:3000,http://127.0.0.1:3000
-FACETRACK_KNOWN_DIR=data/known_faces
-FACETRACK_BATCH_DIR=data/batch_images
-FACETRACK_DB_PATH=backend/attendance.db
-```
-
-Frontend configuration lives in `frontend/.env`:
-
-```bash
+```dotenv
+VITE_FACETRACK_MODE=live
 VITE_API_BASE_URL=http://127.0.0.1:8000
 ```
 
-## API Overview
+## Recognition Pipeline
 
-| Endpoint | Method | Purpose |
+```mermaid
+flowchart LR
+    R[Reference image] --> N[Validate, orient, strip metadata]
+    F[Session frame] --> N
+    N --> D[Detect faces]
+    D --> E[Encode descriptors]
+    E --> M[Nearest reference by distance]
+    M -->|distance <= threshold| A[Deduplicated attendance]
+    M -->|distance > threshold| U[Unknown]
+    A --> X[Delete session frames]
+    U --> X
+```
+
+Face distance is not a calibrated probability. The UI reports the configured threshold and keeps unknown detections unlabelled.
+
+## API Surface
+
+| Method | Route | Purpose |
 | --- | --- | --- |
-| `/` | GET | Basic API health check |
-| `/health` | GET | Structured health check for CI and monitoring |
-| `/upload/known/` | POST | Upload a known face image |
-| `/upload/batch/` | POST | Upload a batch image for processing |
-| `/process/` | POST | Run batch face recognition and mark attendance |
-| `/attendance/` | GET | Retrieve attendance records |
+| `GET` | `/health` | Runtime health check |
+| `GET` | `/roster/` | List enrolled reference identities |
+| `POST` | `/upload/known/` | Validate and enroll one labelled reference |
+| `POST` | `/upload/batch/` | Validate and stage one session frame |
+| `POST` | `/process/` | Run one locked recognition session |
+| `GET` | `/attendance/` | Read the local ledger |
+| `GET` | `/attendance/export/` | Export the ledger as CSV |
+| `DELETE` | `/attendance/` | Clear the local ledger |
 
-FastAPI's interactive docs are available at `http://localhost:8000/docs` when the backend is running.
+Interactive OpenAPI documentation is available at `http://localhost:8000/docs`.
 
-## Development
+## Configuration
 
-Run frontend checks:
+```dotenv
+FACETRACK_ALLOWED_ORIGINS=http://localhost:5173,http://127.0.0.1:5173
+FACETRACK_KNOWN_DIR=data/known_faces
+FACETRACK_BATCH_DIR=data/batch_images
+FACETRACK_DB_PATH=backend/attendance.db
+FACETRACK_MAX_UPLOAD_BYTES=8388608
+FACETRACK_MAX_IMAGE_PIXELS=25000000
+FACETRACK_DELETE_BATCH_AFTER_PROCESS=true
+```
+
+## Privacy Boundary
+
+This repository is designed for local, consented experimentation. It deliberately contains no face images. Runtime uploads and databases are ignored by git, reference images are normalized without EXIF metadata, and session frames are deleted after processing unless explicitly configured otherwise.
+
+Do not expose this API to the public internet as-is. A multi-user deployment requires authentication, authorization, encrypted private storage, retention controls, audit logs, rate limits, jurisdiction-specific review, and a documented consent process.
+
+## Verification
 
 ```bash
+source .venv/bin/activate
+ruff check backend src
+pytest -q
+
 cd frontend
-npm test
-npm run build
+npm run check
 ```
 
-Run backend smoke tests:
+The lightweight backend test suite validates upload boundaries, roster replacement, cleanup, processing orchestration, CSV export, and the recognition contract without compiling dlib. Run the full local stack to verify native inference on your target machine.
 
-```bash
-pip install -r requirements-ci.txt
-PYTHONPATH=. pytest backend/tests
-```
-
-`requirements-ci.txt` intentionally avoids native computer-vision dependencies so CI can verify API wiring without compiling `dlib`. Use `requirements.txt` for the full local recognition pipeline.
-
-## Project Structure
+## Repository Map
 
 ```text
-facetrack/
-├── backend/
-│   ├── database/
-│   │   └── attendance_db.py
-│   └── fastapi_app.py
-├── data/
-│   ├── batch_images/
-│   ├── image_attendance_data/
-│   ├── image_basics_data/
-│   └── known_faces/
-├── docs/
-│   ├── architecture.md
-│   ├── faq.md
-│   ├── usage-guide.md
-│   └── screenshots/
-├── frontend/
-│   ├── public/
-│   └── src/
-├── src/
-│   ├── AttendanceProject.py
-│   ├── basics.py
-│   ├── batch_attendance.py
-│   └── sample_lfw_images.py
-├── requirements.txt
-└── requirements-ci.txt
+backend/
+  fastapi_app.py             upload, session, roster, and ledger API
+  database/attendance_db.py SQLite constraints and queries
+src/
+  recognition.py             lazy native recognition pipeline
+  cli.py                     one-session command-line runner
+frontend/
+  src/api/                   deterministic and live API providers
+  src/App.jsx                session, roster, and attendance views
+docs/media/                  browser-verified desktop and mobile captures
+data/README.md               local biometric-data policy
 ```
 
-## Privacy And Data
-
-Face recognition systems handle biometric data. Use FaceTrack only with images you have permission to process, and do not commit real attendance databases, generated CSV logs, or private face images. Runtime databases and local attendance output are ignored by git.
-
-## Documentation
-
-- [Architecture](docs/architecture.md)
-- [Usage guide](docs/usage-guide.md)
-- [Demo strategy](docs/demo-strategy.md)
-- [FAQ](docs/faq.md)
-
-## Roadmap
-
-- [x] React dashboard for uploads and attendance viewing
-- [x] FastAPI upload and attendance endpoints
-- [x] Batch image processing pipeline
-- [x] SQLite-backed attendance records
-- [ ] Authentication and role-based access
-- [ ] Admin roster management
-- [ ] Docker Compose development environment
-- [ ] Production deployment guide
+See [Architecture](docs/architecture.md), [Usage](docs/usage-guide.md), and [Security](SECURITY.md) for operating details.
 
 ## License
 
-This project is released under the [MIT License](LICENSE).
+Released under the [MIT License](LICENSE).

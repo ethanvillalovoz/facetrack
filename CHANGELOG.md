@@ -1,5 +1,15 @@
 # Changelog
 
+## [1.1.0] - 2026-07-11
+
+- Rebuilt the frontend as a responsive recognition operations console.
+- Added a synthetic credential-free demo and animated README walkthrough.
+- Removed every tracked real-person face image and tutorial-era script.
+- Added bounded image validation, EXIF stripping, UUID filenames, and reference replacement.
+- Added processing serialization, structured summaries, automatic frame cleanup, and CSV export.
+- Enforced one attendance event per identity per UTC day.
+- Added backend linting, expanded tests, and current open-source documentation.
+
 ## [1.0.0] - 2026-06-23
 
 - Polished public documentation, screenshots references, setup instructions, and project metadata.

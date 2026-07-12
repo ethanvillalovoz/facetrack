@@ -1,6 +1,6 @@
-opencv-python
-numpy
-face_recognition
-fastapi
-uvicorn
-python-multipart
+face-recognition>=1.3,<2
+fastapi>=0.115,<1
+numpy>=2,<3
+pillow>=11,<13
+python-multipart>=0.0.20,<1
+uvicorn[standard]>=0.34,<1

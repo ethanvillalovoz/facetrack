@@ -7,8 +7,8 @@ Thanks for your interest in improving FaceTrack.
 Backend:
 
 ```bash
-conda create -n facetrack python=3.11
-conda activate facetrack
+python3 -m venv .venv
+source .venv/bin/activate
 pip install -r requirements.txt
 uvicorn backend.fastapi_app:app --reload
 ```
@@ -19,7 +19,7 @@ Frontend:
 cd frontend
 npm install
 cp .env.example .env
-npm start
+npm run dev
 ```
 
 ## Checks
@@ -28,15 +28,15 @@ Run backend smoke tests:
 
 ```bash
 pip install -r requirements-ci.txt
-PYTHONPATH=. pytest backend/tests
+ruff check backend src
+pytest -q
 ```
 
 Run frontend tests and build:
 
 ```bash
 cd frontend
-npm test
-npm run build
+npm run check
 ```
 
 ## Pull Requests

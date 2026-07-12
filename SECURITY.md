@@ -1,17 +1,20 @@
 # Security Policy
 
-## Supported Versions
-
-The `main` branch is the supported development version.
-
 ## Reporting A Vulnerability
 
-Please open a private security advisory on GitHub if you discover a vulnerability. If that is not available, contact the repository owner directly before posting details publicly.
+Do not open a public issue for vulnerabilities or exposed biometric data. Use a private GitHub security advisory or contact the maintainer through the address on the GitHub profile.
 
 ## Sensitive Data
 
-FaceTrack can process biometric data. Do not commit real face images, production attendance databases, generated CSV logs, API keys, or environment files. Use sample/demo data only when you have permission to share it.
+Never commit or attach:
 
-## Production Notes
+- Face images or descriptor vectors.
+- Attendance databases or CSV exports.
+- Names connected to real attendance events.
+- Private deployment URLs, credentials, or logs.
 
-Before deploying FaceTrack beyond a local prototype, add authentication, strict CORS, access controls, private storage, retention policies, logging, and a consent-aware data handling process.
+## Supported Boundary
+
+FaceTrack is a trusted local reference implementation. It validates image type and size, strips metadata, generates server-side filenames, restricts CORS, serializes processing, deduplicates attendance, and deletes session frames by default.
+
+It does not provide user authentication, authorization, encrypted object storage, liveness detection, anti-spoofing, demographic bias evaluation, or regulatory compliance. Do not expose the API publicly without designing those controls.
