@@ -7,9 +7,9 @@
 
 A local-first face-matching reference system for staging consented session frames, inspecting every identity decision, and writing a deduplicated attendance ledger.
 
-[![FaceTrack running a consent-safe recognition session and inspecting the attendance workflow](docs/media/facetrack-poster.webp)](docs/media/facetrack-demo.mp4)
+https://github.com/user-attachments/assets/a63a18cd-2ca7-40ce-ab57-53e4fd052696
 
-Select the preview to watch the privacy-safe product fixture move through recognition and into the attendance ledger. Native inference is a separate local-only path because public README media should not silently publish biometric data.
+The recording follows the privacy-safe product fixture through recognition and into the attendance ledger. Native inference is a separate local-only path because public README media should not silently publish biometric data. The tracked [MP4](docs/media/facetrack-demo.mp4) and [poster](docs/media/facetrack-poster.webp) preserve the source capture.
 
 ## What It Demonstrates
 
