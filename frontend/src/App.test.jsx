@@ -8,7 +8,7 @@ describe("FaceTrack workspace", () => {
     const user = userEvent.setup()
     render(<App />)
 
-    expect(screen.getByRole("heading", { name: /inspect the match/i })).toBeInTheDocument()
+    expect(screen.getByRole("heading", { name: /recognition session/i })).toBeInTheDocument()
     await user.click(screen.getByRole("button", { name: /run recognition/i }))
     expect(screen.getByRole("button", { name: /comparing faces/i })).toBeDisabled()
     expect(await screen.findByRole("button", { name: /run again/i }, { timeout: 2_000 })).toBeEnabled()

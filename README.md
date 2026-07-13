@@ -7,7 +7,9 @@
 
 A local-first face-matching reference system for staging consented session frames, inspecting every identity decision, and writing a deduplicated attendance ledger.
 
-![FaceTrack recognition console](docs/media/facetrack-console.gif)
+[![FaceTrack running a consent-safe recognition session and inspecting the attendance workflow](docs/media/facetrack-poster.webp)](docs/media/facetrack-demo.mp4)
+
+Select the preview to watch the privacy-safe product fixture move through recognition and into the attendance ledger. Native inference is a separate local-only path because public README media should not silently publish biometric data.
 
 ## What It Demonstrates
 
@@ -123,6 +125,8 @@ npm run check
 
 The lightweight backend test suite validates upload boundaries, roster replacement, cleanup, processing orchestration, CSV export, and the recognition contract without compiling dlib. Run the full local stack to verify native inference on your target machine.
 
+The maintained native path was also exercised end to end on macOS with the React client, FastAPI, SQLite, dlib, and `face_recognition`: one enrolled reference, one staged frame, one detected face, and one match under the configured `0.48` threshold. This is a runtime check, not an accuracy benchmark.
+
 ## Repository Map
 
 ```text
@@ -135,7 +139,7 @@ src/
 frontend/
   src/api/                   deterministic and live API providers
   src/App.jsx                session, roster, and attendance views
-docs/media/                  browser-verified desktop and mobile captures
+docs/media/                  browser-verified interaction capture and poster
 data/README.md               local biometric-data policy
 ```
 

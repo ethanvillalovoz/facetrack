@@ -14,7 +14,7 @@ This path communicates the product and systems behavior without publishing biome
 
 ## README Media
 
-`docs/media/facetrack-console.gif` cycles through browser-verified ready, scanning, completed, roster, and attendance states. Desktop and mobile captures are stored alongside it.
+`docs/media/facetrack-demo.mp4` is captured from the running 1280 x 720 interface. It moves through ready, processing, completed, and attendance states using synthetic identities only. `docs/media/facetrack-poster.webp` preserves the completed recognition state for surfaces that do not play video.
 
 ## Native Demo
 

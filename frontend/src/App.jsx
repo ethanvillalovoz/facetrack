@@ -35,10 +35,10 @@ function AppHeader({ activeView, onViewChange, mode }) {
   return (
     <header className="app-header">
       <a className="brand" href="#main" aria-label="FaceTrack workspace">
-        <span className="brand-mark">FT</span>
+        <span className="brand-sensor" aria-hidden="true"><ScanFace size={20} /></span>
         <span>
           <strong>FaceTrack</strong>
-          <small>Local vision lab</small>
+          <small>Local vision inspection</small>
         </span>
       </a>
       <span className="runtime-badge"><i />{mode === "demo" ? "Synthetic demo" : "Local runtime"}</span>
@@ -74,16 +74,16 @@ const markers = [
   { initials: "?", label: "Unknown", left: "76%", top: "57%", matched: false },
 ]
 
-function VisionFrame({ status }) {
+function VisionFrame({ imageSrc, status }) {
   return (
-    <div className={`vision-frame is-${status}`} aria-label="Synthetic session frame with four detections">
+    <div className={`vision-frame is-${status}${imageSrc ? " has-image" : ""}`} aria-label={imageSrc ? "Uploaded session frame" : "Synthetic session frame with four detections"}>
       <div className="frame-meta">
-        <span>Session 04 / Frame 02</span>
-        <span>1920 x 1080</span>
+        <span>{imageSrc ? "Local session frame" : "Bundled demo frame"}</span>
+        <span>{imageSrc ? "Normalized preview" : "Synthetic"}</span>
       </div>
-      <div className="room-line room-line-one" />
-      <div className="room-line room-line-two" />
-      {markers.map((marker) => (
+      {imageSrc ? <img className="frame-image" src={imageSrc} alt="Frame staged for local recognition" /> : null}
+      {!imageSrc ? <><div className="room-line room-line-one" /><div className="room-line room-line-two" /></> : null}
+      {!imageSrc ? markers.map((marker) => (
         <div
           className={`face-marker ${marker.matched ? "is-match" : "is-unknown"}`}
           key={marker.label}
@@ -94,22 +94,12 @@ function VisionFrame({ status }) {
             {status === "complete" ? marker.label : status === "processing" ? "Comparing" : "Candidate"}
           </span>
         </div>
-      ))}
+      )) : null}
       {status === "processing" ? <div className="scan-line" /> : null}
       <div className="frame-footer">
-        <span><i /> Consent-safe synthetic frame</span>
+        <span><i /> {imageSrc ? "Local preview only" : "Consent-safe demo"}</span>
         <span>Threshold 0.48</span>
       </div>
-    </div>
-  )
-}
-
-function Metric({ label, value, detail }) {
-  return (
-    <div className="metric">
-      <span>{label}</span>
-      <strong>{value}</strong>
-      <small>{detail}</small>
     </div>
   )
 }
@@ -120,7 +110,12 @@ function SessionView({ rosterCount, onAttendanceChanged }) {
   const [summary, setSummary] = useState(null)
   const [error, setError] = useState("")
   const [frameCount, setFrameCount] = useState(api.mode === "demo" ? 2 : 0)
+  const [framePreview, setFramePreview] = useState("")
   const [uploadMessage, setUploadMessage] = useState("")
+
+  useEffect(() => () => {
+    if (framePreview) URL.revokeObjectURL(framePreview)
+  }, [framePreview])
 
   const runSession = async () => {
     setStatus("processing")
@@ -142,6 +137,7 @@ function SessionView({ rosterCount, onAttendanceChanged }) {
     setUploadMessage("Staging frame")
     try {
       await api.uploadFrame(file)
+      setFramePreview(URL.createObjectURL(file))
       setFrameCount((count) => count + 1)
       setUploadMessage(`${file.name} staged`)
       setSummary(null)
@@ -154,31 +150,30 @@ function SessionView({ rosterCount, onAttendanceChanged }) {
   const matches = summary?.matches ?? []
   return (
     <main id="main" className="page-shell">
-      <section className="page-intro" aria-labelledby="session-title">
+      <section className="session-header" aria-labelledby="session-title">
         <div>
-          <p className="eyebrow">01 / Recognition session</p>
-          <h1 id="session-title">Inspect the match, not just the outcome.</h1>
-          <p>Stage consented frames, run one bounded comparison, then review every identity decision.</p>
+          <h1 id="session-title">Recognition session</h1>
+          <p>Stage consented frames and inspect every local match decision.</p>
         </div>
         <div className="privacy-callout">
           <ShieldCheck aria-hidden="true" size={17} />
-          <span><strong>Local-first</strong> Session frames are deleted after processing.</span>
+          <span><strong>Local-first</strong> Frames are deleted after processing.</span>
         </div>
       </section>
 
-      <section className="metrics-strip" aria-label="Session metrics">
-        <Metric label="Reference roster" value={rosterCount} detail="identities ready" />
-        <Metric label="Session input" value={frameCount} detail="frames staged" />
-        <Metric label="Match threshold" value="0.48" detail="face distance" />
-        <Metric label="Retention" value="0 h" detail="after processing" />
+      <section className="session-facts" aria-label="Session metrics">
+        <span><strong>{rosterCount}</strong> reference identities</span>
+        <span><strong>{frameCount}</strong> staged frames</span>
+        <span><strong>0.48</strong> distance threshold</span>
+        <span><strong>0 h</strong> retention</span>
       </section>
 
       <section className="session-workspace">
         <div className="stage-column">
           <div className="section-heading">
             <div>
-              <p className="section-kicker">Session frame</p>
-              <h2>Candidate detections</h2>
+              <p className="section-kicker">Input</p>
+              <h2>Session frame</h2>
             </div>
             <label className="icon-command" htmlFor="session-frame">
               <ImagePlus aria-hidden="true" size={15} />
@@ -192,7 +187,7 @@ function SessionView({ rosterCount, onAttendanceChanged }) {
               type="file"
             />
           </div>
-          <VisionFrame status={status} />
+          <VisionFrame imageSrc={framePreview} status={status} />
           <p className="upload-status" aria-live="polite">{uploadMessage}</p>
         </div>
 
@@ -214,10 +209,19 @@ function SessionView({ rosterCount, onAttendanceChanged }) {
           </ol>
 
           {status === "complete" ? (
-            <div className="match-summary" aria-live="polite">
-              <div><strong>{matches.length}</strong><span>matched</span></div>
-              <div><strong>{summary.unknown_faces}</strong><span>unknown</span></div>
-              <div><strong>{summary.frames_processed}</strong><span>frames</span></div>
+            <div aria-live="polite">
+              <div className="match-summary">
+                <div><strong>{matches.length}</strong><span>matched</span></div>
+                <div><strong>{summary.unknown_faces}</strong><span>unknown</span></div>
+                <div><strong>{summary.frames_processed}</strong><span>frames</span></div>
+              </div>
+              {matches.length ? (
+                <ul className="match-list">
+                  {matches.map((match) => (
+                    <li key={`${match.name}-${match.frame}`}><strong>{match.name}</strong><span>{match.distance.toFixed(4)}</span></li>
+                  ))}
+                </ul>
+              ) : null}
             </div>
           ) : (
             <p className="pipeline-note">Each face is compared against the reference roster. Unknowns remain unlabelled.</p>
@@ -228,7 +232,7 @@ function SessionView({ rosterCount, onAttendanceChanged }) {
             {status === "processing" ? <LoaderCircle className="spin" size={16} /> : status === "complete" ? <Play size={16} /> : <ScanFace size={16} />}
             {status === "processing" ? "Comparing faces" : status === "complete" ? "Run again" : "Run recognition"}
           </button>
-          <p className="mode-note">{api.mode === "demo" ? "Synthetic identities and deterministic decisions." : "Native face_recognition runtime."}</p>
+          <p className="mode-note">{api.mode === "demo" ? "Bundled demo decisions" : "Native face_recognition runtime"}</p>
         </aside>
       </section>
     </main>
