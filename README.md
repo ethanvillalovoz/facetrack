@@ -7,9 +7,9 @@
 
 A local-first face-matching reference system for staging consented session frames, inspecting every identity decision, and writing a deduplicated attendance ledger.
 
-https://github.com/user-attachments/assets/a63a18cd-2ca7-40ce-ab57-53e4fd052696
+[![FaceTrack demo: inspect a local recognition session and its attendance ledger](docs/media/facetrack-demo.gif)](docs/media/facetrack-demo.mp4)
 
-The recording follows the privacy-safe product fixture through recognition and into the attendance ledger. Native inference is a separate local-only path because public README media should not silently publish biometric data. The tracked [MP4](docs/media/facetrack-demo.mp4) and [poster](docs/media/facetrack-poster.webp) preserve the source capture.
+The browser demo uses synthetic identities to show recognition and attendance without publishing biometric data. Native inference remains a separate local-only path. [MP4 demo](docs/media/facetrack-demo.mp4) · [poster frame](docs/media/facetrack-poster.webp)
 
 ## What It Demonstrates
 

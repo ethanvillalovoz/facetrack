@@ -2,17 +2,18 @@ import { useCallback, useEffect, useState } from "react"
 import {
   Check,
   Database,
-  Download,
-  Github,
-  ImagePlus,
-  LoaderCircle,
+  DownloadSimple,
+  GithubLogo,
+  ImageSquare,
+  SpinnerGap,
   Play,
-  ScanFace,
+  Scan,
+  ScanSmiley,
   ShieldCheck,
-  Trash2,
-  Upload,
+  Trash,
+  UploadSimple,
   Users,
-} from "lucide-react"
+} from "@phosphor-icons/react"
 import "./App.css"
 import DemoApiProvider from "./api/DemoApiProvider.jsx"
 import LiveApiProvider from "./api/LiveApiProvider.jsx"
@@ -30,18 +31,17 @@ function formatTimestamp(value) {
   }).format(timestamp)
 }
 
-function AppHeader({ activeView, onViewChange, mode }) {
+function AppHeader({ activeView, onViewChange }) {
   const views = ["session", "roster", "attendance"]
   return (
     <header className="app-header">
       <a className="brand" href="#main" aria-label="FaceTrack workspace">
-        <span className="brand-sensor" aria-hidden="true"><ScanFace size={20} /></span>
+        <span className="brand-sensor" aria-hidden="true"><ScanSmiley size={22} /></span>
         <span>
           <strong>FaceTrack</strong>
-          <small>Local vision inspection</small>
+          <small>Local-first face recognition</small>
         </span>
       </a>
-      <span className="runtime-badge"><i />{mode === "demo" ? "Synthetic demo" : "Local runtime"}</span>
       <nav aria-label="Workspace views">
         {views.map((view) => (
           <button
@@ -60,7 +60,7 @@ function AppHeader({ activeView, onViewChange, mode }) {
         rel="noreferrer"
         target="_blank"
       >
-        <Github aria-hidden="true" size={15} />
+        <GithubLogo aria-hidden="true" size={17} />
         Repository
       </a>
     </header>
@@ -68,43 +68,54 @@ function AppHeader({ activeView, onViewChange, mode }) {
 }
 
 const markers = [
-  { initials: "AC", label: "Ava Chen", left: "15%", top: "22%", matched: true },
-  { initials: "JL", label: "Jordan Lee", left: "42%", top: "30%", matched: true },
-  { initials: "MP", label: "Mina Patel", left: "68%", top: "19%", matched: true },
-  { initials: "?", label: "Unknown", left: "76%", top: "57%", matched: false },
+  { index: "1", initials: "AC", label: "Ava Chen", left: "13%", top: "21%", width: "15%", height: "31%", matched: true },
+  { index: "2", initials: "JL", label: "Jordan Lee", left: "47%", top: "27%", width: "13%", height: "30%", matched: true },
+  { index: "3", initials: "MP", label: "Mina Patel", left: "71%", top: "23%", width: "14%", height: "30%", matched: true },
+  { index: "4", initials: "?", label: "Unknown", left: "43%", top: "13%", width: "9%", height: "20%", matched: false },
 ]
 
 function VisionFrame({ imageSrc, status }) {
   return (
-    <div className={`vision-frame is-${status}${imageSrc ? " has-image" : ""}`} aria-label={imageSrc ? "Uploaded session frame" : "Synthetic session frame with four detections"}>
-      <div className="frame-meta">
-        <span>{imageSrc ? "Local session frame" : "Bundled demo frame"}</span>
-        <span>{imageSrc ? "Normalized preview" : "Synthetic"}</span>
+    <figure className={`vision-frame is-${status}${imageSrc ? " has-image" : ""}`} aria-label={imageSrc ? "Uploaded session frame" : "Bundled consent-safe classroom frame with four detections"}>
+      <div className="frame-canvas">
+        <img
+          className="frame-image"
+          src={imageSrc || "/demo-session.webp"}
+          alt={imageSrc ? "Frame staged for local recognition" : "Four fictional students working in a computer science classroom"}
+        />
+        {!imageSrc ? markers.map((marker) => (
+          <div
+            className={`face-marker ${marker.matched ? "is-match" : "is-unknown"}`}
+            key={marker.index}
+            style={{
+              "--marker-height": marker.height,
+              "--marker-left": marker.left,
+              "--marker-top": marker.top,
+              "--marker-width": marker.width,
+            }}
+          >
+            <span className="marker-index">{marker.index}</span>
+            {status !== "ready" ? (
+              <span className="face-label">
+                {status === "complete" ? marker.initials : "..."}
+              </span>
+            ) : null}
+          </div>
+        )) : null}
       </div>
-      {imageSrc ? <img className="frame-image" src={imageSrc} alt="Frame staged for local recognition" /> : null}
-      {!imageSrc ? <><div className="room-line room-line-one" /><div className="room-line room-line-two" /></> : null}
-      {!imageSrc ? markers.map((marker) => (
-        <div
-          className={`face-marker ${marker.matched ? "is-match" : "is-unknown"}`}
-          key={marker.label}
-          style={{ "--marker-left": marker.left, "--marker-top": marker.top }}
-        >
-          <span className="face-avatar">{marker.initials}</span>
-          <span className="face-label">
-            {status === "complete" ? marker.label : status === "processing" ? "Comparing" : "Candidate"}
-          </span>
-        </div>
-      )) : null}
-      {status === "processing" ? <div className="scan-line" /> : null}
-      <div className="frame-footer">
-        <span><i /> {imageSrc ? "Local preview only" : "Consent-safe demo"}</span>
-        <span>Threshold 0.48</span>
-      </div>
-    </div>
+      <figcaption className="frame-footer">
+        <span>2026-07-14&nbsp;&nbsp;09:41:32</span>
+        <span>Camera: bundled demo</span>
+        <span>1280 x 720</span>
+        <span>Threshold: 0.48</span>
+      </figcaption>
+    </figure>
   )
 }
 
-function SessionView({ rosterCount, onAttendanceChanged }) {
+const pipelineSteps = ["Detect faces", "Encode descriptors", "Compare roster", "Attendance decision"]
+
+function SessionView({ roster, onAttendanceChanged }) {
   const api = useApi()
   const [status, setStatus] = useState("ready")
   const [summary, setSummary] = useState(null)
@@ -148,6 +159,16 @@ function SessionView({ rosterCount, onAttendanceChanged }) {
   }
 
   const matches = summary?.matches ?? []
+  const ledgerRows = markers.map((marker, index) => {
+    const identity = roster[index]?.label || marker.label
+    const match = marker.matched ? matches.find((item) => item.name === identity) : null
+    return {
+      ...marker,
+      distance: match?.distance,
+      identity,
+      state: status === "complete" ? marker.matched ? "present" : "unknown" : "pending",
+    }
+  })
   return (
     <main id="main" className="page-shell">
       <section className="session-header" aria-labelledby="session-title">
@@ -157,26 +178,25 @@ function SessionView({ rosterCount, onAttendanceChanged }) {
         </div>
         <div className="privacy-callout">
           <ShieldCheck aria-hidden="true" size={17} />
-          <span><strong>Local-first</strong> Frames are deleted after processing.</span>
+          <span><strong>Local-first:</strong> processing stays on this device. Frames are not uploaded.</span>
         </div>
       </section>
 
-      <section className="session-facts" aria-label="Session metrics">
-        <span><strong>{rosterCount}</strong> reference identities</span>
-        <span><strong>{frameCount}</strong> staged frames</span>
-        <span><strong>0.48</strong> distance threshold</span>
-        <span><strong>0 h</strong> retention</span>
-      </section>
+      <ol className={`recognition-progress is-${status}`} aria-label="Recognition progress">
+        {pipelineSteps.map((step, index) => (
+          <li className={status === "complete" ? "is-complete" : status === "processing" ? "is-processing" : index === 0 ? "is-current" : ""} key={step}>
+            <span>{status === "complete" ? <Check size={13} weight="bold" /> : index + 1}</span>
+            <strong>{step}</strong>
+          </li>
+        ))}
+      </ol>
 
       <section className="session-workspace">
-        <div className="stage-column">
-          <div className="section-heading">
-            <div>
-              <p className="section-kicker">Input</p>
-              <h2>Session frame</h2>
-            </div>
+        <div className="frame-panel">
+          <div className="panel-heading">
+            <p><span>Session frame</span><small>{frameCount} staged</small></p>
             <label className="icon-command" htmlFor="session-frame">
-              <ImagePlus aria-hidden="true" size={15} />
+              <ImageSquare aria-hidden="true" size={17} />
               Add frame
             </label>
             <input
@@ -191,48 +211,39 @@ function SessionView({ rosterCount, onAttendanceChanged }) {
           <p className="upload-status" aria-live="polite">{uploadMessage}</p>
         </div>
 
-        <aside className="pipeline-panel" aria-labelledby="pipeline-title">
-          <div className="section-heading compact">
-            <div>
-              <p className="section-kicker">Processing trace</p>
-              <h2 id="pipeline-title">Recognition pipeline</h2>
-            </div>
+        <aside className="match-ledger" aria-labelledby="ledger-title">
+          <div className="panel-heading ledger-heading">
+            <p><span id="ledger-title">Match ledger</span><small>{status === "complete" ? `${summary.faces_detected} faces detected` : "Awaiting decision"}</small></p>
             <span className={`status-label is-${status}`}>{status}</span>
           </div>
-          <ol className="pipeline-steps">
-            {["Detect faces", "Encode descriptors", "Compare roster", "Deduplicate day"].map((step, index) => (
-              <li className={status === "complete" ? "is-complete" : status === "processing" ? "is-active" : ""} key={step}>
-                <span>{status === "complete" ? <Check size={13} /> : String(index + 1).padStart(2, "0")}</span>
-                {step}
+          <div className="ledger-columns" aria-hidden="true"><span>#</span><span>Identity</span><span>Distance</span><span>Decision</span></div>
+          <ol className="ledger-rows">
+            {ledgerRows.map((row) => (
+              <li className={`is-${row.state}`} key={row.index}>
+                <span>{row.index}</span>
+                <span className="ledger-identity"><i>{row.initials}</i><strong>{row.identity}</strong></span>
+                <code>{row.distance === undefined ? "—" : row.distance.toFixed(3)}</code>
+                <span className="ledger-decision">
+                  {row.state === "present" ? <Check size={14} weight="bold" /> : null}
+                  {row.state === "present" ? "Present" : row.state === "unknown" ? "Not recognized" : "Pending"}
+                </span>
               </li>
             ))}
           </ol>
-
-          {status === "complete" ? (
-            <div aria-live="polite">
+          <div className="ledger-actions">
+            {status === "complete" ? (
               <div className="match-summary">
-                <div><strong>{matches.length}</strong><span>matched</span></div>
+                <div><strong>{matches.length}</strong><span>present</span></div>
                 <div><strong>{summary.unknown_faces}</strong><span>unknown</span></div>
-                <div><strong>{summary.frames_processed}</strong><span>frames</span></div>
               </div>
-              {matches.length ? (
-                <ul className="match-list">
-                  {matches.map((match) => (
-                    <li key={`${match.name}-${match.frame}`}><strong>{match.name}</strong><span>{match.distance.toFixed(4)}</span></li>
-                  ))}
-                </ul>
-              ) : null}
-            </div>
-          ) : (
-            <p className="pipeline-note">Each face is compared against the reference roster. Unknowns remain unlabelled.</p>
-          )}
-
-          {error ? <p className="error-message" role="alert">{error}</p> : null}
-          <button className="primary-command" disabled={status === "processing" || frameCount === 0} onClick={runSession} type="button">
-            {status === "processing" ? <LoaderCircle className="spin" size={16} /> : status === "complete" ? <Play size={16} /> : <ScanFace size={16} />}
-            {status === "processing" ? "Comparing faces" : status === "complete" ? "Run again" : "Run recognition"}
-          </button>
-          <p className="mode-note">{api.mode === "demo" ? "Bundled demo decisions" : "Native face_recognition runtime"}</p>
+            ) : <p className="pipeline-note">Run locally to compare this frame with {roster.length} reference identities.</p>}
+            {error ? <p className="error-message" role="alert">{error}</p> : null}
+            <button className="primary-command" disabled={status === "processing" || frameCount === 0} onClick={runSession} type="button">
+              {status === "processing" ? <SpinnerGap className="spin" size={17} /> : status === "complete" ? <Play size={17} /> : <Scan size={17} />}
+              {status === "processing" ? "Comparing faces" : status === "complete" ? "Run again" : "Run recognition"}
+            </button>
+            <p className="mode-note">{api.mode === "demo" ? "Bundled demo; decisions are not stored" : "Native face_recognition runtime"}</p>
+          </div>
         </aside>
       </section>
     </main>
@@ -290,7 +301,7 @@ function RosterView({ roster, onRosterChanged }) {
           <label htmlFor="identity-label">Display label</label>
           <input id="identity-label" maxLength="80" onChange={(event) => setLabel(event.target.value)} placeholder="Ava Chen" value={label} />
           <label className="file-drop" htmlFor="identity-image">
-            <Upload size={18} />
+            <UploadSimple size={18} />
             <span><strong>{file ? file.name : "Choose reference image"}</strong><small>JPEG, PNG, or WebP up to 8 MB</small></span>
           </label>
           <input accept="image/jpeg,image/png,image/webp" className="visually-hidden" id="identity-image" onChange={(event) => setFile(event.target.files?.[0] || null)} type="file" />
@@ -348,8 +359,8 @@ function AttendanceView({ attendance, onAttendanceChanged }) {
           <p>Daily deduplication keeps one local attendance event per recognized identity.</p>
         </div>
         <div className="table-actions">
-          <button className="secondary-command" disabled={!attendance.length} onClick={exportCsv} type="button"><Download size={15} /> Export CSV</button>
-          <button className="danger-command" disabled={!attendance.length} onClick={clearRecords} type="button"><Trash2 size={15} /> {confirmClear ? "Confirm clear" : "Clear"}</button>
+          <button className="secondary-command" disabled={!attendance.length} onClick={exportCsv} type="button"><DownloadSimple size={15} /> Export CSV</button>
+          <button className="danger-command" disabled={!attendance.length} onClick={clearRecords} type="button"><Trash size={15} /> {confirmClear ? "Confirm clear" : "Clear"}</button>
         </div>
       </section>
       <section className="attendance-table" aria-label="Attendance records">
@@ -407,12 +418,12 @@ function Workspace() {
 
   return (
     <div className="app-shell">
-      <AppHeader activeView={activeView} mode={api.mode} onViewChange={changeView} />
+      <AppHeader activeView={activeView} onViewChange={changeView} />
       {workspaceError ? <div className="connection-banner" role="alert">{workspaceError}</div> : null}
-      {activeView === "session" ? <SessionView onAttendanceChanged={refreshAttendance} rosterCount={roster.length} /> : null}
+      {activeView === "session" ? <SessionView onAttendanceChanged={refreshAttendance} roster={roster} /> : null}
       {activeView === "roster" ? <RosterView onRosterChanged={refreshRoster} roster={roster} /> : null}
       {activeView === "attendance" ? <AttendanceView attendance={attendance} onAttendanceChanged={refreshAttendance} /> : null}
-      <footer className="app-footer"><span>FaceTrack / local reference implementation</span><span>Consent required for every image</span></footer>
+      <footer className="app-footer"><span>FaceTrack / {api.mode === "demo" ? "bundled demo" : "local runtime"}</span><span>Consent required for every image</span></footer>
     </div>
   )
 }

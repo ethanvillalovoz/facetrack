@@ -4,6 +4,9 @@
   "private": true,
   "type": "module",
   "dependencies": {
+    "@fontsource/source-code-pro": "^5.2.7",
+    "@fontsource/source-sans-3": "^5.2.9",
+    "@phosphor-icons/react": "^2.1.10",
     "lucide-react": "^0.545.0",
     "react": "^19.1.0",
     "react-dom": "^19.1.0"
