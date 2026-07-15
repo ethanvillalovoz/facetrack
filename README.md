@@ -5,15 +5,15 @@
 [![React](https://img.shields.io/badge/React-19-222222.svg)](https://react.dev/)
 [![FastAPI](https://img.shields.io/badge/FastAPI-0.115%2B-222222.svg)](https://fastapi.tiangolo.com/)
 
-A local-first face-matching reference system for staging consented session frames, inspecting every identity decision, and writing a deduplicated attendance ledger.
+The useful output from FaceTrack is not a box around a face. It is the decision trail: the staged frame, every match distance, the threshold outcome, and the one attendance write allowed per person each UTC day.
 
 [![FaceTrack demo: inspect a local recognition session and its attendance ledger](docs/media/facetrack-demo.gif)](docs/media/facetrack-demo.mp4)
 
-The browser demo uses synthetic identities to show recognition and attendance without publishing biometric data. Native inference remains a separate local-only path. [MP4 demo](docs/media/facetrack-demo.mp4) · [poster frame](docs/media/facetrack-poster.webp)
+The browser recording uses a bundled, consent-safe image and deterministic distances. That keeps the public walkthrough inspectable without publishing biometric data; native inference remains local. [MP4 demo](docs/media/facetrack-demo.mp4) · [poster frame](docs/media/facetrack-poster.webp)
 
-## What It Demonstrates
+## Boundaries And Behavior
 
-- A synthetic interactive demo with no accounts, backend, or real face images.
+- A deterministic browser demo with no accounts or backend; its bundled session frame never leaves the page.
 - A real local path built on `face_recognition`, FastAPI, SQLite, and React.
 - JPEG/PNG/WebP validation, upload limits, EXIF removal, and image normalization.
 - UUID storage names that prevent traversal and accidental overwrite.
@@ -24,7 +24,7 @@ The browser demo uses synthetic identities to show recognition and attendance wi
 
 ## Run The Synthetic Demo
 
-The frontend opens in demo mode by default. It uses abstract identities and deterministic decisions while preserving the live API contract.
+The frontend opens in demo mode by default. It uses an abstract roster and deterministic decisions while preserving the live API contract.
 
 ```bash
 git clone https://github.com/ethanvillalovoz/facetrack.git
@@ -64,18 +64,9 @@ VITE_API_BASE_URL=http://127.0.0.1:8000
 
 ## Recognition Pipeline
 
-```mermaid
-flowchart LR
-    R[Reference image] --> N[Validate, orient, strip metadata]
-    F[Session frame] --> N
-    N --> D[Detect faces]
-    D --> E[Encode descriptors]
-    E --> M[Nearest reference by distance]
-    M -->|distance <= threshold| A[Deduplicated attendance]
-    M -->|distance > threshold| U[Unknown]
-    A --> X[Delete session frames]
-    U --> X
-```
+[![FaceTrack recognition flow from validated images to inspectable match decisions and cleanup](docs/media/recognition-flow.svg)](docs/media/recognition-flow.excalidraw)
+
+Open the diagram to edit the original Excalidraw scene.
 
 Face distance is not a calibrated probability. The UI reports the configured threshold and keeps unknown detections unlabelled.
 

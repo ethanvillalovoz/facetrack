@@ -74,7 +74,7 @@ const markers = [
   { index: "4", initials: "?", label: "Unknown", left: "43%", top: "13%", width: "9%", height: "20%", matched: false },
 ]
 
-function VisionFrame({ imageSrc, status }) {
+function VisionFrame({ imageSrc, onSelect, selectedIndex, status }) {
   return (
     <figure className={`vision-frame is-${status}${imageSrc ? " has-image" : ""}`} aria-label={imageSrc ? "Uploaded session frame" : "Bundled consent-safe classroom frame with four detections"}>
       <div className="frame-canvas">
@@ -84,9 +84,12 @@ function VisionFrame({ imageSrc, status }) {
           alt={imageSrc ? "Frame staged for local recognition" : "Four fictional students working in a computer science classroom"}
         />
         {!imageSrc ? markers.map((marker) => (
-          <div
-            className={`face-marker ${marker.matched ? "is-match" : "is-unknown"}`}
+          <button
+            aria-label={`Inspect detection ${marker.index}: ${marker.label}`}
+            aria-pressed={selectedIndex === marker.index}
+            className={`face-marker ${marker.matched ? "is-match" : "is-unknown"}${selectedIndex === marker.index ? " is-selected" : ""}`}
             key={marker.index}
+            onClick={() => onSelect(marker.index)}
             style={{
               "--marker-height": marker.height,
               "--marker-left": marker.left,
@@ -100,7 +103,7 @@ function VisionFrame({ imageSrc, status }) {
                 {status === "complete" ? marker.initials : "..."}
               </span>
             ) : null}
-          </div>
+          </button>
         )) : null}
       </div>
       <figcaption className="frame-footer">
@@ -122,6 +125,7 @@ function SessionView({ roster, onAttendanceChanged }) {
   const [error, setError] = useState("")
   const [frameCount, setFrameCount] = useState(api.mode === "demo" ? 2 : 0)
   const [framePreview, setFramePreview] = useState("")
+  const [selectedIndex, setSelectedIndex] = useState("1")
   const [uploadMessage, setUploadMessage] = useState("")
 
   useEffect(() => () => {
@@ -169,6 +173,7 @@ function SessionView({ roster, onAttendanceChanged }) {
       state: status === "complete" ? marker.matched ? "present" : "unknown" : "pending",
     }
   })
+  const selectedRow = ledgerRows.find((row) => row.index === selectedIndex) || ledgerRows[0]
   return (
     <main id="main" className="page-shell">
       <section className="session-header" aria-labelledby="session-title">
@@ -207,7 +212,12 @@ function SessionView({ roster, onAttendanceChanged }) {
               type="file"
             />
           </div>
-          <VisionFrame imageSrc={framePreview} status={status} />
+          <VisionFrame
+            imageSrc={framePreview}
+            onSelect={setSelectedIndex}
+            selectedIndex={selectedIndex}
+            status={status}
+          />
           <p className="upload-status" aria-live="polite">{uploadMessage}</p>
         </div>
 
@@ -219,18 +229,36 @@ function SessionView({ roster, onAttendanceChanged }) {
           <div className="ledger-columns" aria-hidden="true"><span>#</span><span>Identity</span><span>Distance</span><span>Decision</span></div>
           <ol className="ledger-rows">
             {ledgerRows.map((row) => (
-              <li className={`is-${row.state}`} key={row.index}>
-                <span>{row.index}</span>
-                <span className="ledger-identity"><i>{row.initials}</i><strong>{row.identity}</strong></span>
-                <code>{row.distance === undefined ? "—" : row.distance.toFixed(3)}</code>
-                <span className="ledger-decision">
-                  {row.state === "present" ? <Check size={14} weight="bold" /> : null}
-                  {row.state === "present" ? "Present" : row.state === "unknown" ? "Not recognized" : "Pending"}
-                </span>
+              <li key={row.index}>
+                <button
+                  aria-pressed={selectedIndex === row.index}
+                  className={`ledger-row is-${row.state}${selectedIndex === row.index ? " is-selected" : ""}`}
+                  onClick={() => setSelectedIndex(row.index)}
+                  type="button"
+                >
+                  <span>{row.index}</span>
+                  <span className="ledger-identity"><i>{row.initials}</i><strong>{row.identity}</strong></span>
+                  <code>{row.distance === undefined ? "—" : row.distance.toFixed(3)}</code>
+                  <span className="ledger-decision">
+                    {row.state === "present" ? <Check size={14} weight="bold" /> : null}
+                    {row.state === "present" ? "Present" : row.state === "unknown" ? "Not recognized" : "Pending"}
+                  </span>
+                </button>
               </li>
             ))}
           </ol>
           <div className="ledger-actions">
+            <p className="selection-readout" aria-live="polite">
+              <span>Detection {selectedRow.index}</span>
+              <strong>{selectedRow.identity}</strong>
+              <small>
+                {selectedRow.state === "unknown"
+                  ? `No roster match met the ${summary.distance_threshold.toFixed(2)} distance threshold.`
+                  : selectedRow.distance === undefined
+                  ? "Select a detection now; run recognition to inspect its distance."
+                  : `${selectedRow.distance.toFixed(3)} distance against a ${summary.distance_threshold.toFixed(2)} threshold.`}
+              </small>
+            </p>
             {status === "complete" ? (
               <div className="match-summary">
                 <div><strong>{matches.length}</strong><span>present</span></div>
