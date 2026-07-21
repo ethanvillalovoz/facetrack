@@ -1,0 +1,57 @@
+{"kind":"deck","id":"pr/s01b38","name":"Deck"}
+{"kind":"layout","layoutId":"7e460523-f691-460a-aede-59da5d8a0be8","name":"Master","type":"master"}
+{"kind":"layout","layoutId":"c4960298-046b-40d0-9e89-f975b48dd476","name":"Title Slide","type":"title"}
+{"kind":"slide","id":"sl/pec3cb","slide":1,"title":"FaceTrack keeps each attendance decision tied to its detection and distance","textShapes":32}
+{"kind":"textbox","id":"sh/6lcra50f","slide":1,"name":"figure-title","text":"FaceTrack keeps each attendance decision tied to its detection and distance","textPreview":"FaceTrack keeps each attendance decision tied to its detection and distance","textChars":75,"textLines":1,"bbox":[42,24,1196,46]}
+{"kind":"textbox","id":"sh/t83al0j6","slide":1,"name":"figure-subtitle","text":"The public fixture shows every outcome; local code keeps the ledger and frame lifecycle explicit.","textPreview":"The public fixture shows every outcome; local code keeps the ledger and frame lifecycle explicit.","textChars":97,"textLines":1,"bbox":[42,73,1110,27]}
+{"kind":"shape","id":"sh/s7utcvil","slide":1,"name":"title-rule","bbox":[42,111,1196,0]}
+{"kind":"textbox","id":"sh/falsna1w","slide":1,"name":"trace-label","text":"COMPLETE DECISION TRACE","textPreview":"COMPLETE DECISION TRACE","textChars":23,"textLines":1,"bbox":[42,130,300,22]}
+{"kind":"textbox","id":"sh/u9cbe50r","slide":1,"name":"distance-label","text":"DISTANCE THRESHOLD","textPreview":"DISTANCE THRESHOLD","textChars":18,"textLines":1,"bbox":[850,130,250,22]}
+{"kind":"shape","id":"sh/hc3apkj2","slide":1,"name":"workspace-frame","bbox":[42,158,770,338]}
+{"kind":"textbox","id":"sh/3e5sra18","slide":1,"name":"workspace-caption","text":"Bundled deterministic demo · fictional classroom image · all four detections shown","textPreview":"Bundled deterministic demo · fictional classroom image · all four detections shown","textChars":82,"textLines":1,"bbox":[42,503,770,24]}
+{"kind":"textbox","id":"sh/2dwbip0n","slide":1,"name":"distance-title","text":"Face distance","textPreview":"Face distance","textChars":13,"textLines":1,"bbox":[850,160,190,26]}
+{"kind":"textbox","id":"sh/4zq9cfa9","slide":1,"name":"distance-note","text":"lower is closer · not a probability","textPreview":"lower is closer · not a probability","textChars":35,"textLines":1,"bbox":[1010,163,228,22]}
+{"kind":"shape","id":"sh/50za5kbu","slide":1,"name":"unknown-region","bbox":[1164,197,54,140]}
+{"kind":"shape","id":"sh/ixora5sj","slide":1,"name":"threshold-line","bbox":[1164,187,0,166]}
+{"kind":"textbox","id":"sh/jyxs3ato","slide":1,"name":"threshold-label","text":"τ = 0.48","textPreview":"τ = 0.48","textChars":8,"textLines":1,"bbox":[1122,182,84,22]}
+{"kind":"textbox","id":"sh/s3q9gfal","slide":1,"name":"match-1-name","text":"1  Ava","textPreview":"1  Ava","textChars":6,"textLines":1,"bbox":[850,212,92,26]}
+{"kind":"shape","id":"sh/t4za9kb6","slide":1,"name":"match-1-track","bbox":[948,225,270,0]}
+{"kind":"shape","id":"sh/618repsf","slide":1,"name":"match-1-value-line","bbox":[948,225,126.45,0]}
+{"kind":"shape","id":"sh/r2hs7ut0","slide":1,"name":"match-1-dot","bbox":[1067.45,218,14,14]}
+{"kind":"textbox","id":"sh/g7a9kzah","slide":1,"name":"match-1-value","text":"0.281","textPreview":"0.281","textChars":5,"textLines":1,"bbox":[1083.45,212,58,24]}
+{"kind":"textbox","id":"sh/1sjad4b2","slide":1,"name":"match-2-name","text":"2  Jordan","textPreview":"2  Jordan","textChars":9,"textLines":1,"bbox":[850,257,92,26]}
+{"kind":"shape","id":"sh/pcvih0zu","slide":1,"name":"match-2-track","bbox":[948,270,270,0]}
+{"kind":"shape","id":"sh/obm18vyp","slide":1,"name":"match-2-value-line","bbox":[948,270,141.3,0]}
+{"kind":"shape","id":"sh/3ad0fqh4","slide":1,"name":"match-2-dot","bbox":[1082.3,263,14,14]}
+{"kind":"textbox","id":"sh/294j6lgj","slide":1,"name":"match-2-value","text":"0.314","textPreview":"0.314","textChars":5,"textLines":1,"bbox":[1098.3,257,58,24]}
+{"kind":"textbox","id":"sh/dgfilkz6","slide":1,"name":"match-3-name","text":"3  Mina","textPreview":"3  Mina","textChars":7,"textLines":1,"bbox":[850,302,92,26]}
+{"kind":"shape","id":"sh/cf61cfyl","slide":1,"name":"match-3-track","bbox":[948,315,270,0]}
+{"kind":"shape","id":"sh/bed0jah0","slide":1,"name":"match-3-value-line","bbox":[948,315,151.65,0]}
+{"kind":"shape","id":"sh/qd4ja5gf","slide":1,"name":"match-3-dot","bbox":[1092.65,308,14,14]}
+{"kind":"textbox","id":"sh/tkbi9gzm","slide":1,"name":"match-3-value","text":"0.337","textPreview":"0.337","textChars":5,"textLines":1,"bbox":[1108.65,302,58,24]}
+{"kind":"shape","id":"sh/sj2h0byh","slide":1,"name":"distance-axis","bbox":[948,351,270,0]}
+{"kind":"textbox","id":"sh/ip0fahwz","slide":1,"name":"axis-zero","text":"0.00","textPreview":"0.00","textChars":4,"textLines":1,"bbox":[926,356,44,21]}
+{"kind":"textbox","id":"sh/jq9gjmxk","slide":1,"name":"axis-threshold","text":"0.48","textPreview":"0.48","textChars":4,"textLines":1,"bbox":[1140,356,48,21]}
+{"kind":"textbox","id":"sh/4rixcre5","slide":1,"name":"axis-max","text":">0.48","textPreview":">0.48","textChars":5,"textLines":1,"bbox":[1176,356,60,21]}
+{"kind":"shape","id":"sh/5crylwfq","slide":1,"name":"unknown-marker","bbox":[850,390,34,34]}
+{"kind":"textbox","id":"sh/6d0fe1wb","slide":1,"name":"unknown-question","text":"?","textPreview":"?","textChars":1,"textLines":1,"bbox":[850,394,34,24]}
+{"kind":"textbox","id":"sh/re9gnmxw","slide":1,"name":"unknown-title","text":"Detection 4 stays unknown","textPreview":"Detection 4 stays unknown","textChars":25,"textLines":1,"bbox":[896,387,280,25]}
+{"kind":"textbox","id":"sh/sfixgreh","slide":1,"name":"unknown-copy","text":"Outcome retained; fixture does not store its distance.","textPreview":"Outcome retained; fixture does not store its distance.","textChars":54,"textLines":1,"bbox":[896,415,320,25]}
+{"kind":"shape","id":"sh/tgbypwfm","slide":1,"name":"retention-divider","bbox":[850,454,388,0]}
+{"kind":"textbox","id":"sh/mhgf2xwr","slide":1,"name":"retention-label","text":"LOCAL RETENTION","textPreview":"LOCAL RETENTION","textChars":15,"textLines":1,"bbox":[850,466,180,22]}
+{"kind":"textbox","id":"sh/7ipwb2xc","slide":1,"name":"ledger-rule","text":"Ledger","textPreview":"Ledger","textChars":6,"textLines":1,"bbox":[850,492,82,22]}
+{"kind":"textbox","id":"sh/nehwfypg","slide":1,"name":"ledger-code","text":"UNIQUE(name, attendance_date)","textPreview":"UNIQUE(name, attendance_date)","textChars":29,"textLines":1,"bbox":[936,492,282,22]}
+{"kind":"textbox","id":"sh/2d8v6t8v","slide":1,"name":"frame-rule","text":"Frames","textPreview":"Frames","textChars":6,"textLines":1,"bbox":[850,518,82,22]}
+{"kind":"textbox","id":"sh/pgzeho76","slide":1,"name":"frame-code","text":"finally → delete staged files","textPreview":"finally → delete staged files","textChars":29,"textLines":1,"bbox":[936,518,282,22]}
+{"kind":"shape","id":"sh/ofqd8jq1","slide":1,"name":"boundary-top-rule","bbox":[42,559,1196,0]}
+{"kind":"textbox","id":"sh/bihwjypc","slide":1,"name":"demo-boundary-heading","text":"DEMO EVIDENCE","textPreview":"DEMO EVIDENCE","textChars":13,"textLines":1,"bbox":[42,579,330,22]}
+{"kind":"textbox","id":"sh/ah8vator","slide":1,"name":"demo-boundary-copy","text":"Fictional image and deterministic values. The demo writes no attendance records.","textPreview":"Fictional image and deterministic values. The demo writes no attendance records.","textChars":80,"textLines":1,"bbox":[42,607,330,48]}
+{"kind":"shape","id":"sh/xkzel87i","slide":1,"name":"boundary-divider-1","bbox":[392,579,0,75]}
+{"kind":"textbox","id":"sh/cjqdc36x","slide":1,"name":"live-boundary-heading","text":"LIVE IMPLEMENTATION","textPreview":"LIVE IMPLEMENTATION","textChars":19,"textLines":1,"bbox":[420,579,330,22]}
+{"kind":"textbox","id":"sh/j61wnipo","slide":1,"name":"live-boundary-copy","text":"Local, consented images; one processing lock; daily SQLite deduplication; cleanup by default.","textPreview":"Local, consented images; one processing lock; daily SQLite deduplication; cleanup by default.","textChars":93,"textLines":1,"bbox":[420,607,330,48]}
+{"kind":"shape","id":"sh/y5svedo3","slide":1,"name":"boundary-divider-2","bbox":[798,579,0,75]}
+{"kind":"textbox","id":"sh/gbad4nm1","slide":1,"name":"claim-boundary-heading","text":"NOT CLAIMED","textPreview":"NOT CLAIMED","textChars":11,"textLines":1,"bbox":[826,579,330,22]}
+{"kind":"textbox","id":"sh/hc3uxsnm","slide":1,"name":"claim-boundary-copy","text":"No recognition-accuracy study, biometric dataset, surveillance deployment, or outcome evidence.","textPreview":"No recognition-accuracy study, biometric dataset, surveillance deployment, or outcome evidence.","textChars":95,"textLines":1,"bbox":[826,607,330,48]}
+{"kind":"textbox","id":"sh/u9sv2d4v","slide":1,"name":"source-note","text":"Sources: frontend/src/data/demo.js · src/recognition.py · backend/database/attendance_db.py · backend/fastapi_app.py","textPreview":"Sources: frontend/src/data/demo.js · src/recognition.py · backend/database/attendance_db.py · backend/fastapi_app.py","textChars":116,"textLines":1,"bbox":[42,681,1196,20]}
+{"kind":"image","id":"im/50jitk3u","slide":1,"name":"","alt":"Complete deterministic FaceTrack demo showing four numbered detections and their synchronized match ledger","bbox":[44,160,766,334]}
+{"kind":"notes","id":"nt/pec3cb","slide":1,"text":""}

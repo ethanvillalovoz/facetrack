@@ -2,6 +2,8 @@
 
 FaceTrack is a local reference implementation with a deterministic review mode and an optional native recognition runtime.
 
+For an evidence-led view of the complete public fixture and its implementation boundaries, see the [FaceTrack decision trace](figures/facetrack-decision-trace/README.md).
+
 ## Runtime Modes
 
 The default frontend uses `DemoApiProvider`. It presents synthetic identities and deterministic comparison results through the same methods as the live provider. `VITE_FACETRACK_MODE=live` switches the interface to FastAPI.

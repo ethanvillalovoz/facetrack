@@ -9,7 +9,7 @@ The useful output from FaceTrack is not a box around a face. It is the decision 
 
 [![FaceTrack demo: inspect a local recognition session and its attendance ledger](docs/media/facetrack-demo.gif)](docs/media/facetrack-demo.mp4)
 
-The browser recording uses a bundled, consent-safe image and deterministic distances. That keeps the public walkthrough inspectable without publishing biometric data; native inference remains local. [MP4 demo](docs/media/facetrack-demo.mp4) · [poster frame](docs/media/facetrack-poster.webp)
+The browser recording uses a bundled fictional classroom image and deterministic distances. That keeps the public walkthrough inspectable without publishing real biometric data; native inference remains local. [MP4 demo](docs/media/facetrack-demo.mp4) · [poster frame](docs/media/facetrack-poster.webp)
 
 ## Boundaries And Behavior
 
@@ -62,11 +62,11 @@ VITE_FACETRACK_MODE=live
 VITE_API_BASE_URL=http://127.0.0.1:8000
 ```
 
-## Recognition Pipeline
+## Decision Trace
 
-[![FaceTrack recognition flow from validated images to inspectable match decisions and cleanup](docs/media/recognition-flow.svg)](docs/media/recognition-flow.excalidraw)
+[![FaceTrack decision trace connecting all four bundled detections to face distance, the threshold outcome, the local ledger rule, and session-frame cleanup](docs/figures/facetrack-decision-trace/exports/facetrack-decision-trace.svg)](docs/figures/facetrack-decision-trace/exports/facetrack-decision-trace.pdf)
 
-Open the diagram to edit the original Excalidraw scene.
+The figure shows the complete deterministic demo state: three fixture matches at or below `0.48` and one unknown outcome whose distance is not stored. [Editable PowerPoint](docs/figures/facetrack-decision-trace/editable/facetrack-decision-trace.pptx) · [evidence contract](docs/figures/facetrack-decision-trace/contract.md) · [provenance](docs/figures/facetrack-decision-trace/provenance.json)
 
 Face distance is not a calibrated probability. The UI reports the configured threshold and keeps unknown detections unlabelled.
 
@@ -99,7 +99,7 @@ FACETRACK_DELETE_BATCH_AFTER_PROCESS=true
 
 ## Privacy Boundary
 
-This repository is designed for local, consented experimentation. It deliberately contains no face images. Runtime uploads and databases are ignored by git, reference images are normalized without EXIF metadata, and session frames are deleted after processing unless explicitly configured otherwise.
+This repository is designed for local, consented experimentation. It contains no photographs or biometric data from real people; the public demo uses a fictional classroom illustration. Runtime uploads and databases are ignored by git, reference images are normalized without EXIF metadata, and session frames are deleted after processing unless explicitly configured otherwise.
 
 Do not expose this API to the public internet as-is. A multi-user deployment requires authentication, authorization, encrypted private storage, retention controls, audit logs, rate limits, jurisdiction-specific review, and a documented consent process.
 
@@ -131,6 +131,7 @@ frontend/
   src/api/                   deterministic and live API providers
   src/App.jsx                session, roster, and attendance views
 docs/media/                  browser-verified interaction capture and poster
+docs/figures/                evidence-led figure, editable source, and provenance
 data/README.md               local biometric-data policy
 ```
 

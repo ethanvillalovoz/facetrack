@@ -1,0 +1,157 @@
+{
+  "bytes": 303218,
+  "failures": [],
+  "file": "/Users/ethanvillalovoz/Documents/Codex/2026-07-15/ok/work/visual-audit/repos/facetrack/docs/figures/facetrack-decision-trace/exports/facetrack-decision-trace.pdf",
+  "font_report": {
+    "available": true,
+    "fonts": [
+      {
+        "embedded": true,
+        "encoding": "WinAnsi",
+        "name": "BAAAAA+Carlito-Bold",
+        "subset": true,
+        "type": "TrueType",
+        "unicode": true
+      },
+      {
+        "embedded": true,
+        "encoding": "WinAnsi",
+        "name": "CAAAAA+Carlito",
+        "subset": true,
+        "type": "TrueType",
+        "unicode": true
+      },
+      {
+        "embedded": true,
+        "encoding": "WinAnsi",
+        "name": "DAAAAA+Carlito-Bold",
+        "subset": true,
+        "type": "TrueType",
+        "unicode": true
+      },
+      {
+        "embedded": true,
+        "encoding": "WinAnsi",
+        "name": "EAAAAA+Carlito",
+        "subset": true,
+        "type": "TrueType",
+        "unicode": true
+      },
+      {
+        "embedded": true,
+        "encoding": "WinAnsi",
+        "name": "FAAAAA+Carlito-Bold",
+        "subset": true,
+        "type": "TrueType",
+        "unicode": true
+      },
+      {
+        "embedded": true,
+        "encoding": "WinAnsi",
+        "name": "GAAAAA+Carlito",
+        "subset": true,
+        "type": "TrueType",
+        "unicode": true
+      },
+      {
+        "embedded": true,
+        "encoding": "WinAnsi",
+        "name": "HAAAAA+Carlito-Bold",
+        "subset": true,
+        "type": "TrueType",
+        "unicode": true
+      },
+      {
+        "embedded": true,
+        "encoding": "WinAnsi",
+        "name": "IAAAAA+Carlito",
+        "subset": true,
+        "type": "TrueType",
+        "unicode": true
+      },
+      {
+        "embedded": true,
+        "encoding": "WinAnsi",
+        "name": "JAAAAA+Carlito-Bold",
+        "subset": true,
+        "type": "TrueType",
+        "unicode": true
+      },
+      {
+        "embedded": true,
+        "encoding": "WinAnsi",
+        "name": "KAAAAA+Carlito-Bold",
+        "subset": true,
+        "type": "TrueType",
+        "unicode": true
+      },
+      {
+        "embedded": true,
+        "encoding": "WinAnsi",
+        "name": "LAAAAA+Carlito-Bold",
+        "subset": true,
+        "type": "TrueType",
+        "unicode": true
+      },
+      {
+        "embedded": true,
+        "encoding": "WinAnsi",
+        "name": "MAAAAA+Carlito-Bold",
+        "subset": true,
+        "type": "TrueType",
+        "unicode": true
+      },
+      {
+        "embedded": true,
+        "encoding": "WinAnsi",
+        "name": "NAAAAA+Carlito",
+        "subset": true,
+        "type": "TrueType",
+        "unicode": true
+      }
+    ]
+  },
+  "image_report": {
+    "available": true,
+    "images": [
+      {
+        "effective_ppi": [
+          534.5,
+          534.5
+        ],
+        "native_ppi": [
+          287.0,
+          287.0
+        ],
+        "number": 0,
+        "page": 1,
+        "pixels": [
+          2280,
+          1000
+        ],
+        "type": "image"
+      }
+    ]
+  },
+  "pdf": {
+    "available": true,
+    "creator": "Impress",
+    "height_in": 7.5,
+    "page_size": "960.009 x 540 pts",
+    "pages": 1,
+    "pdf_version": "1.7",
+    "producer": "LibreOfficeDev 26.8.0.0.alpha0 (AARCH64)",
+    "width_in": 13.333458333333333
+  },
+  "status": "WARN",
+  "target_width_in": 7.16,
+  "tools": {
+    "pdffonts": "/Users/ethanvillalovoz/.cache/codex-runtimes/codex-primary-runtime/dependencies/native/poppler/poppler/bin/pdffonts",
+    "pdfimages": "/Users/ethanvillalovoz/.cache/codex-runtimes/codex-primary-runtime/dependencies/native/poppler/poppler/bin/pdfimages",
+    "pdfinfo": "/Users/ethanvillalovoz/.cache/codex-runtimes/codex-primary-runtime/dependencies/bin/override/pdfinfo"
+  },
+  "warnings": [
+    "manually verify that raster line art reaches 600 ppi at placed size",
+    "manual review required for final-size text, line weight, clipping, color accessibility, and scientific correctness"
+  ]
+}

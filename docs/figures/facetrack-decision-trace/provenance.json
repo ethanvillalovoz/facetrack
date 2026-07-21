@@ -1,0 +1,76 @@
+{
+  "claim": "FaceTrack keeps each bundled demo attendance outcome tied to a numbered detection and face distance while the implementation deduplicates the local ledger and deletes staged frames by default.",
+  "figure_id": "facetrack-decision-trace",
+  "inputs": [
+    {
+      "bytes": 843,
+      "path": "frontend/src/data/demo.js",
+      "role": "demo_fixture",
+      "sha256": "757758dca511f6d68667a63e2f95c0ef3b50e38e21ed7a71a7be30480b28228e"
+    },
+    {
+      "bytes": 3163,
+      "path": "src/recognition.py",
+      "role": "recognition_rule",
+      "sha256": "1dc56ef68c6c0c6484eb0a38c8cc0e5af61613d6a4527809ad6089f5b48d692f"
+    },
+    {
+      "bytes": 3082,
+      "path": "backend/database/attendance_db.py",
+      "role": "ledger_rule",
+      "sha256": "9ad9b15f7c30cf3ef14f1ec1c58fcc8b1f72d31745af08048a77725f43d1b300"
+    },
+    {
+      "bytes": 7557,
+      "path": "backend/fastapi_app.py",
+      "role": "frame_lifecycle",
+      "sha256": "c354180d10cca172fb9380da0d9d3c50ae30270d13cae7d440e69639d84486f8"
+    },
+    {
+      "bytes": 927910,
+      "path": "docs/figures/facetrack-decision-trace/media/session-workspace-demo.png",
+      "role": "browser_capture",
+      "sha256": "5c0d2608e7e53ee0155ab0e559a0caf3b79f7aa672a1d38f059bae19f58abc1d"
+    },
+    {
+      "bytes": 1005456,
+      "path": "docs/figures/facetrack-decision-trace/media/session-workspace-figure-crop.png",
+      "role": "figure_crop",
+      "sha256": "d8ec2ced79c4aa532d75158fd07494cd1ab481f633cdcf24ba33d47e836c2a8d"
+    }
+  ],
+  "outputs": [
+    {
+      "bytes": 1007856,
+      "path": "docs/figures/facetrack-decision-trace/editable/facetrack-decision-trace.pptx",
+      "role": "editable",
+      "sha256": "05d64dcabc17c661b65f71686af2a1cb5b360932b981116e555b49a7140899df"
+    },
+    {
+      "bytes": 303218,
+      "path": "docs/figures/facetrack-decision-trace/exports/facetrack-decision-trace.pdf",
+      "role": "pdf",
+      "sha256": "717e227154c501031e2396ce6886985160233fc75ff59ad79a5c8251e18cd512"
+    },
+    {
+      "bytes": 807795,
+      "path": "docs/figures/facetrack-decision-trace/exports/facetrack-decision-trace.png",
+      "role": "png",
+      "sha256": "af739e0def28f25f1fe44dffec9dcd4b373debd08dff1dfe2d668af98a8871d6"
+    },
+    {
+      "bytes": 723267,
+      "path": "docs/figures/facetrack-decision-trace/exports/facetrack-decision-trace.svg",
+      "role": "svg",
+      "sha256": "1d3994d055f7f238aa276efdd65ebca9ca93abf3b69c10d1daa6fe1a4ea3efa5"
+    }
+  ],
+  "processing_notes": [
+    "The dominant panel is a crop of the completed browser demo workspace. Threshold and retention annotations are editable native shapes derived from the cited fixture and implementation files."
+  ],
+  "schema_version": 1,
+  "source_revision": "9f9ff00fe3fc8c5c989ed1dec39ff662b0a7f16b",
+  "selection_note": "The complete deterministic public fixture is shown: three matched detections and one unknown. No outcome was omitted; the fixture does not store the unknown face distance.",
+  "target_width_in": 7.16,
+  "venue": "GitHub README and project documentation"
+}
